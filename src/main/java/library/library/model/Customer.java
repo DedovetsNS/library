@@ -21,27 +21,13 @@ public class Customer implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    // TODO: 08.01.2020 попробовать во всех ентити убрать аннотации колумн
-    @Column(name = "login")
     private String login;
-
-    @Column(name = "firstname")
     private String firstName;
-
-    @Column(name = "lastname")
     private String lastName;
-
-    @Column(name = "email")
     private String email;
-
-    @Column(name = "phone")
     private String phone;
-
-    @Column(name = "addres")
     private String addres;
 
     @OneToMany(mappedBy = "customerId", fetch = FetchType.EAGER)
-    private Collection<Loan> loan;
-
-
+    private Collection<Loan> loans;
 }

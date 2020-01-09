@@ -20,19 +20,14 @@ public class Loan implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Integer quantity;
+    private Date date;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id")
     private Customer customerId;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name ="book_id")
+    @JoinColumn(name = "book_id")
     private Book bookId;
-
-    @Column(name ="quantity")
-    private Integer quantity;
-
-    @Column(name ="date")
-    private Date date;
-
 }

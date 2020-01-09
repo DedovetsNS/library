@@ -22,20 +22,20 @@ public class BookService {
         List<String> authorsNames = Arrays.asList(authors.split(";"));
         Integer totalQuantityAsInt = Integer.valueOf(totalQuantity);
 
-        if (bookRepository.existsByName(bookName)){
+        if (bookRepository.existsByName(bookName)) {
             return "This books already exists.";
-        } ;
-        Book newBook = new Book(bookName,publisher,totalQuantityAsInt);
+        }
+        ;
+        Book newBook = new Book(bookName, publisher, totalQuantityAsInt);
         newBook.setIn_stock_quantity(totalQuantityAsInt);
-        ArrayList<Author> authorsList=new ArrayList<>();
+        ArrayList<Author> authorsList = new ArrayList<>();
 
         // TODO: 06.01.2020 по возможности исправить на автоматиеское добавление автора в базу,
         //  если его там еще нет
         for (String authorName : authorsNames) {
-            if (!authorService.existsByName(authorName)){
+            if (!authorService.existsByName(authorName)) {
                 return "One of the authors is not yet in the database. First add all authors to the database.";
-            }
-            else {
+            } else {
                 authorsList.add(authorService.getAuthorByName(authorName));
             }
         }
@@ -45,23 +45,42 @@ public class BookService {
         return "Book successfully added.";
     }
 
-    boolean existByName(String name){
-       return bookRepository.existsByName(name);
+    boolean existByName(String name) {
+        return bookRepository.existsByName(name);
     }
 
-    Integer getQuantityInStockByName(String name){
-       return bookRepository.getBookByName(name).getIn_stock_quantity();
+    Integer getQuantityInStockByName(String name) {
+        return bookRepository.getBookByName(name).getIn_stock_quantity();
     }
 
     Book getByName(String bookName) {
         return bookRepository.getBookByName(bookName);
     }
 
-    void giveBook(String bookName, Integer quantity){
+    void giveBook(String bookName, Integer quantity) {
         Book takedBook = bookRepository.getBookByName(bookName);
-        Integer newQuantity = takedBook.getIn_stock_quantity()-quantity;
+        Integer newQuantity = takedBook.getIn_stock_quantity() - quantity;
         takedBook.setIn_stock_quantity(newQuantity);
         bookRepository.save(takedBook);
     }
 
+    public List<Book> findAll() {
+        return bookRepository.findAll();
+    }
+
+    public Book findByName(String bookName) {
+        return bookRepository.findByName(bookName);
+    }
+
+    public String changeTotalQuantity(Integer changeSize, String bookName) {
+        Book changeQuantityBook = findByName(bookName);
+        Integer oldTotalQuantity = changeQuantityBook.getTotalQuantity();
+        Integer oldInStockQuantity = changeQuantityBook.getIn_stock_quantity();
+
+        if ((changeSize < 0 && changeSize <= oldInStockQuantity) || changeSize > 0) {
+            changeQuantityBook.setTotalQuantity(oldTotalQuantity + changeSize);
+            changeQuantityBook.setIn_stock_quantity(oldInStockQuantity + changeSize);
+            return "Number of books changed.";
+        } else return "You want to pick up more books than are available.";
+    }
 }

@@ -6,6 +6,7 @@ import library.library.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -13,9 +14,9 @@ public class CustomerService {
     @Autowired
     CustomerRepository customerRepository;
 
-    public String regNewCustomer(Map<String,String> regParams){
+    public String regNewCustomer(Map<String, String> regParams) {
         // TODO: 08.01.2020 добавить аналогичную проверку по другим полям
-        if(customerRepository.existsByLogin(regParams.get("login"))){
+        if (customerRepository.existsByLogin(regParams.get("login"))) {
             return "Сlient with that login already exists.";
         }
 
@@ -31,18 +32,21 @@ public class CustomerService {
         return "New customer successfully  added.";
     }
 
-     boolean existByLogin(String login){
+    boolean existByLogin(String login) {
         return customerRepository.existsByLogin(login);
     }
 
-    Customer getByLogin(String login){
+    Customer getByLogin(String login) {
         return customerRepository.findByLogin(login);
     }
 
-    public void addLoan(String login, Loan loan){
+    public void addLoan(String login, Loan loan) {
         Customer borrower = customerRepository.findByLogin(login);
-        borrower.getLoan().add(loan);
+        borrower.getLoans().add(loan);
         customerRepository.save(borrower);
-        }
+    }
 
+    public List<Customer> findAll() {
+        return customerRepository.findAll();
+    }
 }

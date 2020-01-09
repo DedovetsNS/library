@@ -1,5 +1,9 @@
 package library.library.controller;
 
+import library.library.dto.AuthorInBookDto;
+import library.library.dto.BookResponseDto;
+import library.library.model.Author;
+import library.library.model.Book;
 import library.library.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping(path = "/book")
@@ -16,56 +20,47 @@ public class BookController {
     BookService bookService;
 
     @GetMapping("/add")
-    public String add(@RequestParam Map<String,String> addParams){
-       String bookName = addParams.get("bookName");
-       String publisher = addParams.get("publisher");
-       String authors = addParams.get("authors");
-       String totalQuantity = addParams.get("totalQuantity");
+    public String add(@RequestParam Map<String, String> addParams) {
+        String bookName = addParams.get("bookName");
+        String publisher = addParams.get("publisher");
+        String authors = addParams.get("authors");
+        String totalQuantity = addParams.get("totalQuantity");
 
-    return bookService.addNewBook(bookName,publisher,authors,totalQuantity);
+        return bookService.addNewBook(bookName, publisher, authors, totalQuantity);
     }
 
-//    @GetMapping("createAll")
-//    public String createAll(){
-//        Book book1 = new Book("Old man and sea");
-//        Book book2 = new Book("War and peace");
-//        Book book3 = new Book("Died souls");
-//        Author author1 = new Author("Pushkin","39");
-//        Author author2 = new Author("Dostaevski","39");
-//        Author author3 = new Author("Gogol","39");
-//
-//        book1.setAuthors(Arrays.asList(author1,author3));
-//        book2.setAuthors(Arrays.asList(author1,author2,author3));
-//        book3.setAuthors(Arrays.asList(author1));
-//
-//        author1.setBooks(Arrays.asList(book1,book2,book3));
-//        author2.setBooks(Arrays.asList(book2));
-//        author3.setBooks(Arrays.asList(book1,book2));
-//
-//       bookRepository.saveAll(Arrays.asList(book1,book2,book3));
-//
-//
-//
-//
-//
-//        return "Книги созданы  Books are created";
-//    }
-//
-//    @GetMapping("/findAll")
-//    public List<Book> findAll(){
-//        List<Book> books = bookRepository.findAll();
-//        for (Book books  : books  ) {
-//            books.getAuthors().stream().forEach(authors -> authors.setBooks(null));
-//        }
-//
-//        return  books;
-//    }
+    @GetMapping("/findAll")
+    public List<BookResponseDto> findAll() {
+        List<Book> allBooks = bookService.findAll();
+        List<BookResponseDto> allBooksDto = new ArrayList<>();
 
-//    @GetMapping("/findAll")
-//    public List<Author> findAll(){
-//        List<Author> authors  = authorRepository.findAll();
-//        authors.stream().forEach(authors -> authors.setBooks(new Book(authors.getBooks())));
-//        return  authors;
-//    }
+        for (Book book : allBooks) {
+            Collection<Author> authors = book.getAuthors();
+            ArrayList<AuthorInBookDto> authorsDto = new ArrayList<>();
+            for (Author author : authors) {
+                authorsDto.add(new AuthorInBookDto(author.getId(), author.getName(), author.getBirthday()));
+            }
+            BookResponseDto bookDto = BookResponseDto.builder()
+                    .id(book.getId())
+                    .name(book.getName())
+                    .publisher(book.getPublisher())
+                    .totalQuantity(book.getTotalQuantity())
+                    .in_stock_quantity(book.getIn_stock_quantity())
+                    .authors(authorsDto)
+                    .build();
+            allBooksDto.add(bookDto);
+        }
+        Collections.sort(allBooksDto);
+        return allBooksDto;
+    }
 
+    @GetMapping("/changeTotalQuantity")
+    public String changeQuantity(@RequestParam Integer changeSize, String bookName) {
+        if (changeSize == 0) {
+            return "Change size cannot be zero.";
+        }
+        return bookService.changeTotalQuantity(changeSize, bookName);
+    }
+
+    // TODO: 09.01.2020 добавить книгу вместе с авторами 
 }

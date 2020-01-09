@@ -15,10 +15,10 @@ public class LoanController {
     @Autowired
     LoanService loanService;
 
-    @GetMapping("/get")
-    public String get(@RequestParam Map<String,String> loanParams ){
+    @GetMapping("/add")
+    public String add(@RequestParam Map<String, String> loanParams) {
 
-        return loanService.give(loanParams);
+        return loanService.add(loanParams);
     }
 
 }

@@ -18,14 +18,12 @@ public class Book implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "name")
     private String name;
-
-    @Column(name = "publisher")
     private String publisher;
+    private Integer totalQuantity;
+    private Integer in_stock_quantity;
 
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "book_author",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
@@ -33,12 +31,6 @@ public class Book implements Serializable {
 
     @OneToMany(mappedBy = "bookId", fetch = FetchType.EAGER)
     private Collection<Loan> loans;
-
-    @Column(name = "total_quantity")
-    private Integer totalQuantity;
-
-    @Column(name = "in_stock_quantity")
-    private Integer in_stock_quantity;
 
     public Book(String name, String publisher, Integer totalQuantity) {
         this.name = name;
