@@ -29,7 +29,7 @@ public class CustomerService {
                 .addres(regParams.get("addres"))
                 .build();
         customerRepository.save(newRegCustomer);
-        return "New customer successfully  added.";
+        return "Add customer successfully  added.";
     }
 
     boolean existByLogin(String login) {

@@ -1,15 +1,13 @@
 package library.library.controller;
 
-import library.library.dto.AuthorInBookDto;
-import library.library.dto.BookResponseDto;
+import library.library.Transformer;
+import library.library.dto.*;
 import library.library.model.Author;
 import library.library.model.Book;
 import library.library.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
@@ -18,6 +16,8 @@ import java.util.*;
 public class BookController {
     @Autowired
     BookService bookService;
+    @Autowired
+    Transformer transformer;
 
     @GetMapping("/add")
     public String add(@RequestParam Map<String, String> addParams) {
@@ -25,8 +25,15 @@ public class BookController {
         String publisher = addParams.get("publisher");
         String authors = addParams.get("authors");
         String totalQuantity = addParams.get("totalQuantity");
-
         return bookService.addNewBook(bookName, publisher, authors, totalQuantity);
+    }
+
+
+    @PostMapping("/addJSON")
+    public String addJSON(@RequestBody @Validated({Add.class}) BookDto bookDto) {
+        Book addBook = transformer.fromBookDtoToBook(bookDto);
+        bookService.addBook(addBook);
+        return "книга добавлена";
     }
 
     @GetMapping("/findAll")

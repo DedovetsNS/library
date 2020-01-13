@@ -1,13 +1,16 @@
 package library.library.service;
 
+import library.library.Exception.BookAlreadyExistException;
 import library.library.model.Author;
 import library.library.model.Book;
+import library.library.repository.AuthorRepository;
 import library.library.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -16,6 +19,7 @@ public class BookService {
     private BookRepository bookRepository;
     @Autowired
     AuthorService authorService;
+
 
     public String addNewBook(String bookName, String publisher, String authors, String totalQuantity) {
 
@@ -82,5 +86,24 @@ public class BookService {
             changeQuantityBook.setIn_stock_quantity(oldInStockQuantity + changeSize);
             return "Number of books changed.";
         } else return "You want to pick up more books than are available.";
+    }
+
+    public void addBook(Book addBook) {
+
+        Collection<Author> authors = addBook.getAuthors();
+
+        if (bookRepository.existsByName(addBook.getName())) {
+            throw new BookAlreadyExistException();
+        }
+
+        for (Author author : authors) {
+            if (authorService.existsByName(author.getName())) {
+                author = authorService.getAuthorByName(author.getName());
+            }
+            author.getBooks().add(addBook);
+        }
+
+        addBook.setAuthors(authors);
+        bookRepository.save(addBook);
     }
 }

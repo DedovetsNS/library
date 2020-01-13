@@ -12,6 +12,7 @@ import java.util.Collection;
 @Data
 public class BookResponseDto implements Comparable<BookResponseDto> {
 
+
     private Long id;
     private String name;
     private String publisher;

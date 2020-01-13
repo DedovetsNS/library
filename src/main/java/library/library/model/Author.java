@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 
 @NoArgsConstructor
@@ -30,5 +31,6 @@ public class Author implements Serializable {
     public Author(String name, String birthday) {
         this.name = name;
         this.birthday = birthday;
+        this.books = new ArrayList<Book>();
     }
 }
