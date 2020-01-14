@@ -26,13 +26,11 @@ public class AuthorService {
         return authorRepository.findByName(authorName);
     }
 
-    public String addAuthor(String authorName, String birthDate) {
-        if (authorRepository.existsByName(authorName)) {
-            return "This authors already exists in the database.";
+    public Author addAuthor(Author author) {
+        if (authorRepository.existsByName(author.getName())) {
+            throw new IllegalArgumentException("This authors already exists in the database.");
         } else {
-            Author newAuthor = new Author(authorName, birthDate);
-            authorRepository.save(newAuthor);
-            return "Author successfully added in the database.";
+            return authorRepository.save(author);
         }
     }
 

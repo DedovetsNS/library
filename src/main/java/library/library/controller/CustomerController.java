@@ -1,7 +1,7 @@
 package library.library.controller;
 
 
-import library.library.dto.CustomerResponseDto;
+import library.library.dto.CustomerDto;
 import library.library.model.Customer;
 import library.library.model.Loan;
 import library.library.service.CustomerService;
@@ -24,16 +24,16 @@ public class CustomerController {
     CustomerService customerService;
 
     // TODO: 08.01.2020 Проверка введенных данных на адекватность и существование в базе
-    @GetMapping("/registration")
+    @GetMapping("/reg")
     public String login(@RequestParam Map<String, String> regParams) {
 
         return customerService.regNewCustomer(regParams);
     }
 
     @GetMapping("/findAll")
-    public List<CustomerResponseDto> login() {
+    public List<CustomerDto> login() {
         List<Customer> customers = customerService.findAll();
-        List<CustomerResponseDto> customersDto = new ArrayList<>();
+        List<CustomerDto> customersDto = new ArrayList<>();
 
         for (Customer customer : customers) {
             List<Long> loansIdDto = new ArrayList<>();
@@ -41,7 +41,7 @@ public class CustomerController {
             for (Loan loan : loansId) {
                 loansIdDto.add(loan.getId());
             }
-            customersDto.add(CustomerResponseDto.builder()
+            customersDto.add(CustomerDto.builder()
                     .id(customer.getId())
                     .login(customer.getLogin())
                     .firstName(customer.getFirstName())

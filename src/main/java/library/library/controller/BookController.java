@@ -1,15 +1,15 @@
 package library.library.controller;
 
-import library.library.Transformer;
-import library.library.dto.*;
-import library.library.model.Author;
+import library.library.dto.BookDto;
+import library.library.dto.groups.Add;
 import library.library.model.Book;
 import library.library.service.BookService;
+import library.library.transformer.Transformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/book")
@@ -18,56 +18,20 @@ public class BookController {
     BookService bookService;
     @Autowired
     Transformer transformer;
+// TODO: 13.01.2020 автовайринг через конструктор везде
 
-    @GetMapping("/add")
-    public String add(@RequestParam Map<String, String> addParams) {
-        String bookName = addParams.get("bookName");
-        String publisher = addParams.get("publisher");
-        String authors = addParams.get("authors");
-        String totalQuantity = addParams.get("totalQuantity");
-        return bookService.addNewBook(bookName, publisher, authors, totalQuantity);
-    }
-
-
-    @PostMapping("/addJSON")
-    public String addJSON(@RequestBody @Validated({Add.class}) BookDto bookDto) {
+    @PostMapping("/add")
+    public BookDto add(@RequestBody @Validated({Add.class}) BookDto bookDto) {
         Book addBook = transformer.fromBookDtoToBook(bookDto);
         bookService.addBook(addBook);
-        return "книга добавлена";
+        return transformer.fromBookToBookDto(addBook);
     }
 
+    // TODO: 14.01.2020 разобраться с @JsonView({Details.class}), аналогично в остальных
     @GetMapping("/findAll")
-    public List<BookResponseDto> findAll() {
+    public List<BookDto> findAll() {
         List<Book> allBooks = bookService.findAll();
-        List<BookResponseDto> allBooksDto = new ArrayList<>();
-
-        for (Book book : allBooks) {
-            Collection<Author> authors = book.getAuthors();
-            ArrayList<AuthorInBookDto> authorsDto = new ArrayList<>();
-            for (Author author : authors) {
-                authorsDto.add(new AuthorInBookDto(author.getId(), author.getName(), author.getBirthday()));
-            }
-            BookResponseDto bookDto = BookResponseDto.builder()
-                    .id(book.getId())
-                    .name(book.getName())
-                    .publisher(book.getPublisher())
-                    .totalQuantity(book.getTotalQuantity())
-                    .in_stock_quantity(book.getIn_stock_quantity())
-                    .authors(authorsDto)
-                    .build();
-            allBooksDto.add(bookDto);
-        }
-        Collections.sort(allBooksDto);
+        List<BookDto> allBooksDto = transformer.fromBookListToBookDtoList(allBooks);
         return allBooksDto;
     }
-
-    @GetMapping("/changeTotalQuantity")
-    public String changeQuantity(@RequestParam Integer changeSize, String bookName) {
-        if (changeSize == 0) {
-            return "Change size cannot be zero.";
-        }
-        return bookService.changeTotalQuantity(changeSize, bookName);
-    }
-
-    // TODO: 09.01.2020 добавить книгу вместе с авторами 
 }

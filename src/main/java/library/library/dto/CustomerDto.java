@@ -9,7 +9,7 @@ import java.util.Collection;
 @Data
 @AllArgsConstructor
 @Builder
-public class CustomerResponseDto {
+public class CustomerDto {
 
     private Long id;
     private String login;

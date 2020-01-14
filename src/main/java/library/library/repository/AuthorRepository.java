@@ -13,5 +13,4 @@ public interface AuthorRepository extends CrudRepository<Author, Long> {
     boolean existsByName(String authorName);
 
     Author findByName(String authorName);
-//    Author findById(Long id);
 }

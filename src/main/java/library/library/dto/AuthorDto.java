@@ -11,10 +11,9 @@ import javax.validation.constraints.Null;
 import java.util.Collection;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class BookDto {
-
+@AllArgsConstructor
+public class AuthorDto {
     @Null(groups = {Add.class})
     private Long id;
 
@@ -22,16 +21,8 @@ public class BookDto {
     private String name;
 
     @NotNull
-    private String publisher;
+    private String birthday;
 
-    @NotNull
-    private Integer totalQuantity;
-
-    @NotNull(groups = {Details.class})
-    private Integer in_stock_quantity;
-
-    @NotNull
-    private Collection<AuthorInBookDto> authors;
-
+    @Null(groups = {Add.class})
+    private Collection<BookInAuthorDto> books;
 }
-
