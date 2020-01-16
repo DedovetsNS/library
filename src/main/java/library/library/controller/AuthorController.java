@@ -1,7 +1,9 @@
 package library.library.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import library.library.dto.AuthorDto;
 import library.library.dto.groups.Add;
+import library.library.dto.groups.Details;
 import library.library.model.Author;
 import library.library.service.AuthorService;
 import library.library.transformer.Transformer;
@@ -15,21 +17,23 @@ import java.util.List;
 @RequestMapping("/author")
 public class AuthorController {
     @Autowired
-    AuthorService authorService;
+    private AuthorService authorService;
     @Autowired
-    Transformer transformer;
+    private Transformer transformer;
 
+    @JsonView(Details.class)
     @PostMapping("/add")
     public AuthorDto add(@RequestBody @Validated({Add.class}) AuthorDto authorDto) {
         Author addAuthor = transformer.fromAuthorDtoToAuthor(authorDto);
-        authorService.addAuthor(addAuthor);
+        addAuthor = authorService.addAuthor(addAuthor);
         return transformer.fromAuthorToAuthorDto(addAuthor);
     }
 
+    @JsonView(Details.class)
     @GetMapping("/findAll")
     public List<AuthorDto> findAll() {
         List<Author> authors = authorService.findAll();
-        List<AuthorDto> authorsDto = transformer.fromAuthorListToAuthorDtoList(authors);
+        List<AuthorDto> authorsDto = transformer.fromAuthorToAuthorDto(authors);
         return authorsDto;
     }
 }

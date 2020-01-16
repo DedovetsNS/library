@@ -1,5 +1,6 @@
 package library.library.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import library.library.dto.groups.Add;
 import library.library.dto.groups.Details;
@@ -9,34 +10,30 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
-import java.util.Collection;
+import java.util.Date;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class BookDto {
+@AllArgsConstructor
+public class LoanDto {
 
     @JsonView(Details.class)
-    @Null(groups = {Add.class})
+    @Null(groups = Add.class)
     private Long id;
 
     @JsonView(Details.class)
-    @NotNull
-    private String name;
+    @NotNull(groups = Add.class)
+    private String customerLogin;
 
     @JsonView(Details.class)
-    @NotNull
-    private String publisher;
+    @NotNull(groups = Add.class)
+    private String bookName;
 
     @JsonView(Details.class)
-    @NotNull
-    private Integer totalQuantity;
+    @NotNull(groups = Add.class)
+    private Integer quantity;
 
     @JsonView(Details.class)
-    private Integer in_stock_quantity;
-
-    @JsonView(Details.class)
-    @NotNull
-    private Collection<AuthorInBookDto> authors;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
+    private Date date;
 }
-

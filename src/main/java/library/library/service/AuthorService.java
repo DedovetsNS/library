@@ -1,25 +1,23 @@
 package library.library.service;
 
 import library.library.model.Author;
-import library.library.model.Book;
 import library.library.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AuthorService {
     @Autowired
-    private AuthorRepository authorRepository;
-    @Autowired
-    private BookService bookService;
+    private  AuthorRepository authorRepository;
 
     boolean existsByName(String authorName) {
         if (authorRepository.existsByName(authorName)) {
             return true;
-        } else return false;
+        } else {
+            return false;
+        }
     }
 
     Author getAuthorByName(String authorName) {
@@ -36,19 +34,5 @@ public class AuthorService {
 
     public List<Author> findAll() {
         return authorRepository.findAll();
-    }
-
-    public void addBookToAuthor(Book book, String authorName) {
-        Author author = authorRepository.findByName(authorName);
-        author.getBooks().add(book);
-        authorRepository.save(author);
-    }
-
-    public void save(Author author) {
-        authorRepository.save(author);
-    }
-
-    public Optional<Author> findById(Long id) {
-       return authorRepository.findById(id);
     }
 }

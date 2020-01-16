@@ -28,6 +28,6 @@ public class Customer implements Serializable {
     private String phone;
     private String addres;
 
-    @OneToMany(mappedBy = "customerId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
     private Collection<Loan> loans;
 }

@@ -18,7 +18,6 @@ public class Book implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-//    @Column(unique=true)
     private String name;
     private String publisher;
     private Integer totalQuantity;
@@ -30,12 +29,6 @@ public class Book implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Collection<Author> authors;
 
-    @OneToMany(mappedBy = "bookId", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
     private Collection<Loan> loans;
-
-    public Book(String name, String publisher, Integer totalQuantity) {
-        this.name = name;
-        this.publisher = publisher;
-        this.totalQuantity = totalQuantity;
-    }
 }

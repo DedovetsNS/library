@@ -9,30 +9,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 @Service
 public class BookService {
     @Autowired
-    private BookRepository bookRepository;
+    private  BookRepository bookRepository;
     @Autowired
-    AuthorService authorService;
+    private  AuthorService authorService;
 
-    boolean existByName(String name) {
+    private boolean existByName(String name) {
         return bookRepository.existsByName(name);
     }
 
-    Integer getQuantityInStockByName(String name) {
+    private Integer getQuantityInStockByName(String name) {
         return bookRepository.getBookByName(name).getIn_stock_quantity();
     }
 
-    Book getByName(String bookName) {
-        return bookRepository.getBookByName(bookName);
-    }
-
-    void giveBook(String bookName, Integer quantity) {
+    void giveBookToLoan(String bookName, Integer quantity) {
+        if (!existByName(bookName)) {
+            throw new IllegalArgumentException("Book with such name does not exist.");
+        }
+        if (getQuantityInStockByName(bookName) < quantity) {
+            throw new IllegalArgumentException("Less books in the library than you want to take.");
+        }
         Book takedBook = bookRepository.getBookByName(bookName);
         Integer newQuantity = takedBook.getIn_stock_quantity() - quantity;
         takedBook.setIn_stock_quantity(newQuantity);
@@ -47,20 +48,7 @@ public class BookService {
         return bookRepository.findByName(bookName);
     }
 
-    public String changeTotalQuantity(Integer changeSize, String bookName) {
-        Book changeQuantityBook = findByName(bookName);
-        Integer oldTotalQuantity = changeQuantityBook.getTotalQuantity();
-        Integer oldInStockQuantity = changeQuantityBook.getIn_stock_quantity();
-
-        if ((changeSize < 0 && changeSize <= oldInStockQuantity) || changeSize > 0) {
-            changeQuantityBook.setTotalQuantity(oldTotalQuantity + changeSize);
-            changeQuantityBook.setIn_stock_quantity(oldInStockQuantity + changeSize);
-            return "Number of books changed.";
-        } else return "You want to pick up more books than are available.";
-    }
-
     public Book addBook(Book addBook) {
-
         Collection<Author> authors = addBook.getAuthors();
 
         if (bookRepository.existsByName(addBook.getName())) {
@@ -74,14 +62,14 @@ public class BookService {
                 existingAuthor = authorService.getAuthorByName(author.getName());
                 existingAuthor.getBooks().add(addBook);
                 authorsToSave.add(existingAuthor);
-            } else if(author.getName()==null||author.getBirthday()==null){
+            } else if (author.getName() == null || author.getBirthday() == null) {
                 throw new NotAllAuthorsDataException();
-            }else {
+            } else {
                 authorsToSave.add(author);
             }
         }
         addBook.setIn_stock_quantity(addBook.getTotalQuantity());
         addBook.setAuthors(authorsToSave);
-       return bookRepository.save(addBook);
+        return bookRepository.save(addBook);
     }
 }

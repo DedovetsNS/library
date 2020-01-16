@@ -5,8 +5,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 @NoArgsConstructor
 @Data
@@ -18,19 +18,8 @@ public class Author implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    // TODO: 06.01.2020 Сделать дату формата даты, а не строки
-    private String birthday;
-
-//    @Column(updatable = false)
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-//    LocalDateTime creationDate;
+    private Date birthday;
 
     @ManyToMany(mappedBy = "authors")
     private Collection<Book> books;
-
-    public Author(String name, String birthday) {
-        this.name = name;
-        this.birthday = birthday;
-        this.books = new ArrayList<Book>();
-    }
 }
