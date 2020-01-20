@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AuthorRepository extends CrudRepository<Author, Long> {
@@ -13,5 +14,5 @@ public interface AuthorRepository extends CrudRepository<Author, Long> {
 
     boolean existsByName(String authorName);
 
-    Author findByName(String authorName);
+    Optional<Author> findByName(String authorName);
 }

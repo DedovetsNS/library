@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
 import library.library.dto.groups.Add;
 import library.library.dto.groups.Details;
+import library.library.dto.groups.Update;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class AuthorDto {
 
+    @NotNull(groups = Update.class)
     @JsonView(Details.class)
     @Null(groups = {Add.class})
     private Long id;
@@ -33,5 +35,6 @@ public class AuthorDto {
 
     @JsonView(Details.class)
     @Null(groups = {Add.class})
+    @Null(groups = {Update.class})
     private Collection<BookInAuthorDto> books;
 }

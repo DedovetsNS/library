@@ -1,38 +1,21 @@
 package library.library.service;
 
 import library.library.model.Author;
-import library.library.repository.AuthorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class AuthorService {
-    @Autowired
-    private  AuthorRepository authorRepository;
+public interface AuthorService {
+    boolean existsByName(String authorName);
 
-    boolean existsByName(String authorName) {
-        if (authorRepository.existsByName(authorName)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    Author add(Author author);
 
-    Author getAuthorByName(String authorName) {
-        return authorRepository.findByName(authorName);
-    }
+    List<Author> findAll();
 
-    public Author addAuthor(Author author) {
-        if (authorRepository.existsByName(author.getName())) {
-            throw new IllegalArgumentException("This authors already exists in the database.");
-        } else {
-            return authorRepository.save(author);
-        }
-    }
+    Author findById(Long id);
 
-    public List<Author> findAll() {
-        return authorRepository.findAll();
-    }
+    void deleteById(Long id);
+
+    Author update(Author author);
+
+    Author findByName(String name);
 }

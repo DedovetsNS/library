@@ -3,11 +3,15 @@ package library.library.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import library.library.dto.CustomerDto;
+import library.library.dto.LoanDto;
 import library.library.dto.groups.Add;
 import library.library.dto.groups.Details;
+import library.library.dto.groups.Update;
 import library.library.model.Customer;
+import library.library.model.Loan;
 import library.library.service.CustomerService;
-import library.library.transformer.Transformer;
+import library.library.transformer.CustomerTransformer;
+import library.library.transformer.LoanTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,23 +21,58 @@ import java.util.List;
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
-    @Autowired
-    private CustomerService customerService;
-    @Autowired
-    private Transformer transformer;
+    private final CustomerService customerService;
+    private final CustomerTransformer customerTransformer;
+    private final LoanTransformer loanTransformer;
 
-    @PostMapping("/reg")
-    public CustomerDto reg(@RequestBody @Validated(Add.class) CustomerDto customerDto) {
-        Customer customer = transformer.fromCustomerDtoToCustomer(customerDto);
-        customer = customerService.regNewCustomer(customer);
-        return transformer.fromCustomerToCustomerDto(customer);
+    @Autowired
+    public CustomerController(CustomerService customerService, CustomerTransformer customerTransformer, LoanTransformer loanTransformer) {
+        this.customerService = customerService;
+        this.customerTransformer = customerTransformer;
+        this.loanTransformer = loanTransformer;
+    }
+
+    @PostMapping
+    public CustomerDto add(@RequestBody @Validated(Add.class) CustomerDto customerDto) {
+        Customer customer = customerTransformer.toCustomer(customerDto);
+        customer = customerService.add(customer);
+        return customerTransformer.toCustomerDto(customer);
     }
 
     @JsonView(Details.class)
-    @GetMapping("/findAll")
-    public List<CustomerDto> login() {
+    @GetMapping
+    public List<CustomerDto> findAll() {
         List<Customer> customers = customerService.findAll();
-        List<CustomerDto> customersDto = transformer.fromCustomerToCustomerDto(customers);
+        List<CustomerDto> customersDto = customerTransformer.toCustomerDto(customers);
         return customersDto;
+    }
+
+    @JsonView(Details.class)
+    @GetMapping("{id}")
+    public CustomerDto getById(@PathVariable("id") Long id) {
+        Customer customer = customerService.findById(id);
+        CustomerDto customerDto = customerTransformer.toCustomerDto(customer);
+        return customerDto;
+    }
+
+    @DeleteMapping("{id}")
+    public void deleteById(@PathVariable("id") Long id) {
+        customerService.deleteById(id);
+    }
+
+    @JsonView(Details.class)
+    @PutMapping
+    public CustomerDto updateById(@RequestBody @Validated({Update.class}) CustomerDto customerDto) {
+        Customer customer = customerTransformer.toCustomer(customerDto);
+        customer = customerService.update(customer);
+        return customerTransformer.toCustomerDto(customer);
+    }
+
+    @JsonView(Details.class)
+    @GetMapping("{id}/loans")
+    public List<LoanDto> getLoansById(@PathVariable("id") Long id) {
+        Customer customer = customerService.findById(id);
+        List<Loan> loans = (List<Loan>) customer.getLoans();
+        return loanTransformer.toLoanDto(loans);
     }
 }

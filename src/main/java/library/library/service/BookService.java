@@ -1,75 +1,30 @@
 package library.library.service;
 
-import library.library.Exception.BookAlreadyExistException;
-import library.library.Exception.NotAllAuthorsDataException;
 import library.library.model.Author;
 import library.library.model.Book;
-import library.library.repository.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-@Service
-public class BookService {
-    @Autowired
-    private  BookRepository bookRepository;
-    @Autowired
-    private  AuthorService authorService;
+public interface BookService {
+    List<Book> findAll();
 
-    private boolean existByName(String name) {
-        return bookRepository.existsByName(name);
-    }
+    Book findByName(String bookName);
 
-    private Integer getQuantityInStockByName(String name) {
-        return bookRepository.getBookByName(name).getIn_stock_quantity();
-    }
+    Book add(Book book);
 
-    void giveBookToLoan(String bookName, Integer quantity) {
-        if (!existByName(bookName)) {
-            throw new IllegalArgumentException("Book with such name does not exist.");
-        }
-        if (getQuantityInStockByName(bookName) < quantity) {
-            throw new IllegalArgumentException("Less books in the library than you want to take.");
-        }
-        Book takedBook = bookRepository.getBookByName(bookName);
-        Integer newQuantity = takedBook.getIn_stock_quantity() - quantity;
-        takedBook.setIn_stock_quantity(newQuantity);
-        bookRepository.save(takedBook);
-    }
+    Book findById(Long id);
 
-    public List<Book> findAll() {
-        return bookRepository.findAll();
-    }
+    void deleteById(Long id);
 
-    public Book findByName(String bookName) {
-        return bookRepository.findByName(bookName);
-    }
+    boolean existByName(String name);
 
-    public Book addBook(Book addBook) {
-        Collection<Author> authors = addBook.getAuthors();
+    Integer getQuantityInStockByName(String name);
 
-        if (bookRepository.existsByName(addBook.getName())) {
-            throw new BookAlreadyExistException();
-        }
+    Book update(Book book);
 
-        List<Author> authorsToSave = new ArrayList<>();
-        for (Author author : authors) {
-            Author existingAuthor;
-            if (authorService.existsByName(author.getName())) {
-                existingAuthor = authorService.getAuthorByName(author.getName());
-                existingAuthor.getBooks().add(addBook);
-                authorsToSave.add(existingAuthor);
-            } else if (author.getName() == null || author.getBirthday() == null) {
-                throw new NotAllAuthorsDataException();
-            } else {
-                authorsToSave.add(author);
-            }
-        }
-        addBook.setIn_stock_quantity(addBook.getTotalQuantity());
-        addBook.setAuthors(authorsToSave);
-        return bookRepository.save(addBook);
-    }
+    void takeBookToLoan(String bookName, Integer quantity);
+
+    void returnBook(String bookName, Integer quantity);
+
+    void removeAuthor(Book book, Author deletedAuthor);
 }

@@ -23,11 +23,11 @@ public class Loan implements Serializable {
     private Integer quantity;
     private Date date;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;
 }

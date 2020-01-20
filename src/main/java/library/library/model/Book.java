@@ -21,7 +21,7 @@ public class Book implements Serializable {
     private String name;
     private String publisher;
     private Integer totalQuantity;
-    private Integer in_stock_quantity;
+    private Integer inStockQuantity;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "book_author",

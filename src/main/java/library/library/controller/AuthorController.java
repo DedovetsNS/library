@@ -4,9 +4,10 @@ import com.fasterxml.jackson.annotation.JsonView;
 import library.library.dto.AuthorDto;
 import library.library.dto.groups.Add;
 import library.library.dto.groups.Details;
+import library.library.dto.groups.Update;
 import library.library.model.Author;
-import library.library.service.AuthorService;
-import library.library.transformer.Transformer;
+import library.library.service.impl.AuthorServiceImpl;
+import library.library.transformer.AuthorTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -16,24 +17,57 @@ import java.util.List;
 @RestController
 @RequestMapping("/author")
 public class AuthorController {
-    @Autowired
-    private AuthorService authorService;
-    @Autowired
-    private Transformer transformer;
+    private final AuthorServiceImpl authorService;
+    private final AuthorTransformer authorTransformer;
 
-    @JsonView(Details.class)
-    @PostMapping("/add")
-    public AuthorDto add(@RequestBody @Validated({Add.class}) AuthorDto authorDto) {
-        Author addAuthor = transformer.fromAuthorDtoToAuthor(authorDto);
-        addAuthor = authorService.addAuthor(addAuthor);
-        return transformer.fromAuthorToAuthorDto(addAuthor);
+    @Autowired
+    public AuthorController(AuthorServiceImpl authorService, AuthorTransformer authorTransformer) {
+        this.authorService = authorService;
+        this.authorTransformer = authorTransformer;
     }
 
     @JsonView(Details.class)
-    @GetMapping("/findAll")
+    @PostMapping
+    public AuthorDto add(@RequestBody @Validated({Add.class}) AuthorDto authorDto) {
+        Author addAuthor = authorTransformer.toAuthor(authorDto);
+        addAuthor = authorService.add(addAuthor);
+        return authorTransformer.toAuthorDto(addAuthor);
+    }
+
+    @JsonView(Details.class)
+    @GetMapping("{id}")
+    public AuthorDto getById(@PathVariable("id") Long id) {
+        Author author = authorService.findById(id);
+        AuthorDto authorDto = authorTransformer.toAuthorDto(author);
+        return authorDto;
+    }
+
+    @JsonView(Details.class)
+    @GetMapping("name/{name}")
+    public AuthorDto getByName(@PathVariable("name") String name) {
+        Author author = authorService.findByName(name);
+        AuthorDto authorDto = authorTransformer.toAuthorDto(author);
+        return authorDto;
+    }
+
+    @JsonView(Details.class)
+    @GetMapping
     public List<AuthorDto> findAll() {
         List<Author> authors = authorService.findAll();
-        List<AuthorDto> authorsDto = transformer.fromAuthorToAuthorDto(authors);
+        List<AuthorDto> authorsDto = authorTransformer.toAuthorDto(authors);
         return authorsDto;
+    }
+
+    @DeleteMapping("{id}")
+    public void deleteById(@PathVariable("id") Long id) {
+        authorService.deleteById(id);
+    }
+
+    @JsonView(Details.class)
+    @PutMapping
+    public AuthorDto updateById(@RequestBody @Validated({Update.class}) AuthorDto authorDto) {
+        Author author = authorTransformer.toAuthor(authorDto);
+        author = authorService.update(author);
+        return authorTransformer.toAuthorDto(author);
     }
 }
