@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+// TODO: 20.01.2020 транзакции во все сервисы 
 
 @Service
 public class AuthorServiceImpl implements AuthorService {

@@ -6,9 +6,14 @@ import library.library.model.Loan;
 import library.library.repository.LoanRepository;
 import library.library.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 @Service
 public class LoanServiceImpl implements library.library.service.LoanService {
@@ -22,6 +27,9 @@ public class LoanServiceImpl implements library.library.service.LoanService {
         this.customerService = customerService;
         this.bookService = bookService;
     }
+
+    @Value("${library.loanconfig.day}")
+    String days;
 
     @Override
     public Loan takeLoan(Loan loan) {
@@ -59,5 +67,22 @@ public class LoanServiceImpl implements library.library.service.LoanService {
     @Override
     public boolean existById(Long id) {
        return loanRepository.existsById(id);
+    }
+
+    @Override
+    public List<Loan> getExpiredLoans(){
+        List<Loan> loans = loanRepository.findAll();
+        List<Loan> expiredLoans = new ArrayList<>();
+
+        for (Loan loan : loans) {
+        LocalDate takeDate = loan.getDate().toInstant().atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        LocalDate returnDate = takeDate.plusDays(Long.valueOf(days));
+        LocalDate nowDate = LocalDate.now();
+            if(returnDate.isBefore(nowDate)){
+            expiredLoans.add(loan);
+            }
+        }
+        return expiredLoans;
     }
 }

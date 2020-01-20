@@ -7,6 +7,7 @@ import library.library.dto.groups.Details;
 import library.library.dto.groups.Update;
 import library.library.model.Book;
 import library.library.service.impl.BookServiceImpl;
+import library.library.service.impl.EmailServiceImpl;
 import library.library.transformer.BookTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +20,9 @@ import java.util.List;
 public class BookController {
     private final BookServiceImpl bookService;
     private final BookTransformer bookTransformer;
+
+    @Autowired
+    EmailServiceImpl emailService;
 
     @Autowired
     public BookController(BookServiceImpl bookService, BookTransformer bookTransformer) {

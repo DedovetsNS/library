@@ -55,5 +55,11 @@ public class LoanController {
     }
 
 
-    // TODO: 18.01.2020   список истекших
+    @JsonView(Details.class)
+    @GetMapping("/expired")
+    public List<LoanDto> findExpired() {
+        List<Loan> loans = loanService.getExpiredLoans();
+        List<LoanDto> loansDto = loanTransformer.toLoanDto(loans);
+        return loansDto;
+    }
 }
