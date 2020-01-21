@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 public class CustomerServiceImpl implements library.service.CustomerService {
     private final CustomerRepository customerRepository;
-    private  LoanServiceImpl loanService;
+    private LoanServiceImpl loanService;
 
     @Autowired
     public CustomerServiceImpl(CustomerRepository customerRepository) {
@@ -70,7 +70,7 @@ public class CustomerServiceImpl implements library.service.CustomerService {
         Collection<Loan> loans = deletedCustomer.getLoans();
 
         for (Loan loan : loans) {
-            if(loanService.existById(loan.getId())){
+            if (loanService.existById(loan.getId())) {
                 throw new BadRequestParametrException("Cannot delete a customer who has loans.");
             }
         }

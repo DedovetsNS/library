@@ -71,5 +71,3 @@ public class AuthorController {
         return authorTransformer.toAuthorDto(author);
     }
 }
-
-// TODO: 20.01.2020 SWAAAAAGGER сделать

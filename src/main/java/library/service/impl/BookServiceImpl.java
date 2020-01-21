@@ -99,9 +99,6 @@ public class BookServiceImpl implements BookService {
         if (existByName(book.getName())) {
             throw new AlreadyExistByNameException("Book", book.getName());
         }
-        // TODO: 20.01.2020 проверка, при совпадении имени на неовпадение id
-        // TODO: 18.01.2020 также можно сделать умное обновление, обновляет только существующие в запросе параметры 
-        // TODO: 18.01.2020 дублирует авторов, а не достает существующих. Уже решал, попробовать вынести в отдельную функцию 
         updatableBook.setName(book.getName());
         updatableBook.setPublisher(book.getPublisher());
         updatableBook.setTotalQuantity(book.getTotalQuantity());

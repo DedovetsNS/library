@@ -19,7 +19,7 @@ import java.util.List;
 @Service
 public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
-    private  BookService bookService;
+    private BookService bookService;
 
     @Autowired
     public AuthorServiceImpl(AuthorRepository authorRepository) {
@@ -71,7 +71,7 @@ public class AuthorServiceImpl implements AuthorService {
         Author deletedAuthor = findById(id);
         Collection<Book> books = deletedAuthor.getBooks();
         for (Book book : books) {
-            bookService.removeAuthor(book,deletedAuthor);
+            bookService.removeAuthor(book, deletedAuthor);
         }
         authorRepository.deleteById(id);
     }

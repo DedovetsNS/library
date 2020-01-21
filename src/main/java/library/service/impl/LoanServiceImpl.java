@@ -68,22 +68,22 @@ public class LoanServiceImpl implements library.service.LoanService {
 
     @Override
     public boolean existById(Long id) {
-       return loanRepository.existsById(id);
+        return loanRepository.existsById(id);
     }
 
     @Transactional
     @Override
-    public List<Loan> getExpiredLoans(){
+    public List<Loan> getExpiredLoans() {
         List<Loan> loans = loanRepository.findAll();
         List<Loan> expiredLoans = new ArrayList<>();
 
         for (Loan loan : loans) {
-        LocalDate takeDate = loan.getDate().toInstant().atZone(ZoneId.systemDefault())
-                .toLocalDate();
-        LocalDate returnDate = takeDate.plusDays(Long.valueOf(delayDays));
-        LocalDate nowDate = LocalDate.now();
-            if(returnDate.isBefore(nowDate)){
-            expiredLoans.add(loan);
+            LocalDate takeDate = loan.getDate().toInstant().atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            LocalDate returnDate = takeDate.plusDays(Long.valueOf(delayDays));
+            LocalDate nowDate = LocalDate.now();
+            if (returnDate.isBefore(nowDate)) {
+                expiredLoans.add(loan);
             }
         }
         return expiredLoans;
