@@ -94,11 +94,11 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public Book update(Book book) {
-        Book updatableBook = findById(book.getId());
-
         if (existByName(book.getName())) {
             throw new AlreadyExistByNameException("Book", book.getName());
         }
+        Book updatableBook = findById(book.getId());
+
         updatableBook.setName(book.getName());
         updatableBook.setPublisher(book.getPublisher());
         updatableBook.setTotalQuantity(book.getTotalQuantity());

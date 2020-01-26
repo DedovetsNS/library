@@ -50,18 +50,3 @@ foreign key (book_id) references book;
 alter table if exists loan
 add constraint loan_customer_fk
 foreign key (customer_id) references customer;
-
-create sequence author_id_seq;
-alter sequence author_id_seq owner to postgres;
-
-create sequence book_id_seq;
-alter sequence book_id_seq owner to postgres;
-
-create sequence customer_id_seq;
-alter sequence customer_id_seq owner to postgres;
-
-create sequence hibernate_sequence;
-alter sequence hibernate_sequence owner to postgres;
-
-create sequence loan_id_seq;
-alter sequence loan_id_seq owner to postgres;

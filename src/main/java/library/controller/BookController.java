@@ -20,14 +20,13 @@ import java.util.List;
 public class BookController {
     private final BookServiceImpl bookService;
     private final BookTransformer bookTransformer;
+    private final EmailServiceImpl emailService;
 
     @Autowired
-    EmailServiceImpl emailService;
-
-    @Autowired
-    public BookController(BookServiceImpl bookService, BookTransformer bookTransformer) {
+    public BookController(BookServiceImpl bookService, BookTransformer bookTransformer, EmailServiceImpl emailService) {
         this.bookService = bookService;
         this.bookTransformer = bookTransformer;
+        this.emailService = emailService;
     }
 
     @JsonView(Details.class)
@@ -42,16 +41,14 @@ public class BookController {
     @GetMapping
     public List<BookDto> findAll() {
         List<Book> allBooks = bookService.findAll();
-        List<BookDto> allBooksDto = bookTransformer.toBookDto(allBooks);
-        return allBooksDto;
+        return bookTransformer.toBookDto(allBooks);
     }
 
     @JsonView(Details.class)
     @GetMapping("{id}")
     public BookDto getById(@PathVariable("id") Long id) {
         Book book = bookService.findById(id);
-        BookDto bookDto = bookTransformer.toBookDto(book);
-        return bookDto;
+        return bookTransformer.toBookDto(book);
     }
 
     @DeleteMapping("{id}")
