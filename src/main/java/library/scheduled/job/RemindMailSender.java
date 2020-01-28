@@ -1,6 +1,8 @@
 package library.scheduled.job;
 
 import library.model.Loan;
+import library.service.EmailService;
+import library.service.LoanService;
 import library.service.impl.EmailServiceImpl;
 import library.service.impl.LoanServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +13,8 @@ import java.util.List;
 
 @Component
 public class RemindMailSender {
-    private final EmailServiceImpl emailService;
-    private final LoanServiceImpl loanService;
+    private final EmailService emailService;
+    private final LoanService loanService;
 
     @Autowired
     public RemindMailSender(EmailServiceImpl emailService, LoanServiceImpl loanService) {

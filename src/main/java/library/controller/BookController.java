@@ -6,6 +6,8 @@ import library.dto.groups.Add;
 import library.dto.groups.Details;
 import library.dto.groups.Update;
 import library.model.Book;
+import library.service.BookService;
+import library.service.EmailService;
 import library.service.impl.BookServiceImpl;
 import library.service.impl.EmailServiceImpl;
 import library.transformer.BookTransformer;
@@ -18,9 +20,9 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/book")
 public class BookController {
-    private final BookServiceImpl bookService;
+    private final BookService bookService;
     private final BookTransformer bookTransformer;
-    private final EmailServiceImpl emailService;
+    private final EmailService emailService;
 
     @Autowired
     public BookController(BookServiceImpl bookService, BookTransformer bookTransformer, EmailServiceImpl emailService) {

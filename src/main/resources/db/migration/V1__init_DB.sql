@@ -6,15 +6,15 @@ name varchar(255) not null
 
 create table book (
 id  bigserial primary key,
-in_stock_quantity int4 not null,
+in_stock_quantity bigint not null,
 name varchar(255) not null,
 publisher varchar(255) not null,
-total_quantity int4 not null
+total_quantity bigint not null
 );
 
 create table book_author (
-book_id int8 not null,
-author_id int8 not null
+book_id bigint not null,
+author_id bigint not null
 );
 
 create table customer (
@@ -30,9 +30,9 @@ phone varchar(255) not null
 create table loan (
 id  bigserial primary key,
 date timestamp not null,
-quantity int4 not null,
-book_id int8 not null,
-customer_id int8 not null
+quantity bigint not null,
+book_id bigint not null,
+customer_id bigint not null
 );
 
 alter table if exists book_author

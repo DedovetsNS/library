@@ -5,7 +5,7 @@ import library.dto.LoanDto;
 import library.dto.groups.Add;
 import library.dto.groups.Details;
 import library.model.Loan;
-import library.service.impl.LoanServiceImpl;
+import library.service.LoanService;
 import library.transformer.LoanTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -16,11 +16,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/loan")
 public class LoanController {
-    private final LoanServiceImpl loanService;
+    private final LoanService loanService;
     private final LoanTransformer loanTransformer;
 
     @Autowired
-    public LoanController(LoanServiceImpl loanService, LoanTransformer loanTransformer) {
+    public LoanController(LoanService loanService, LoanTransformer loanTransformer) {
         this.loanService = loanService;
         this.loanTransformer = loanTransformer;
     }
@@ -37,16 +37,14 @@ public class LoanController {
     @GetMapping
     public List<LoanDto> findAll() {
         List<Loan> loans = loanService.findAll();
-        List<LoanDto> loansDto = loanTransformer.toLoanDto(loans);
-        return loansDto;
+        return loanTransformer.toLoanDto(loans);
     }
 
     @JsonView(Details.class)
     @GetMapping("{id}")
     public LoanDto getById(@PathVariable("id") Long id) {
         Loan loan = loanService.findById(id);
-        LoanDto loanDto = loanTransformer.toLoanDto(loan);
-        return loanDto;
+        return loanTransformer.toLoanDto(loan);
     }
 
     @DeleteMapping("{id}")
@@ -59,7 +57,6 @@ public class LoanController {
     @GetMapping("/expired")
     public List<LoanDto> findExpired() {
         List<Loan> loans = loanService.getExpiredLoans();
-        List<LoanDto> loansDto = loanTransformer.toLoanDto(loans);
-        return loansDto;
+        return loanTransformer.toLoanDto(loans);
     }
 }

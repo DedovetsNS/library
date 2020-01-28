@@ -6,7 +6,7 @@ import library.dto.groups.Add;
 import library.dto.groups.Details;
 import library.dto.groups.Update;
 import library.model.Author;
-import library.service.impl.AuthorServiceImpl;
+import library.service.AuthorService;
 import library.transformer.AuthorTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -17,11 +17,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/author")
 public class AuthorController {
-    private final AuthorServiceImpl authorService;
+    private final AuthorService authorService;
     private final AuthorTransformer authorTransformer;
 
     @Autowired
-    public AuthorController(AuthorServiceImpl authorService, AuthorTransformer authorTransformer) {
+    public AuthorController(AuthorService authorService, AuthorTransformer authorTransformer) {
         this.authorService = authorService;
         this.authorTransformer = authorTransformer;
     }
@@ -38,24 +38,21 @@ public class AuthorController {
     @GetMapping("{id}")
     public AuthorDto getById(@PathVariable("id") Long id) {
         Author author = authorService.findById(id);
-        AuthorDto authorDto = authorTransformer.toAuthorDto(author);
-        return authorDto;
+        return authorTransformer.toAuthorDto(author);
     }
 
     @JsonView(Details.class)
     @GetMapping("name/{name}")
     public AuthorDto getByName(@PathVariable("name") String name) {
         Author author = authorService.findByName(name);
-        AuthorDto authorDto = authorTransformer.toAuthorDto(author);
-        return authorDto;
+        return authorTransformer.toAuthorDto(author);
     }
 
     @JsonView(Details.class)
     @GetMapping
     public List<AuthorDto> findAll() {
         List<Author> authors = authorService.findAll();
-        List<AuthorDto> authorsDto = authorTransformer.toAuthorDto(authors);
-        return authorsDto;
+        return authorTransformer.toAuthorDto(authors);
     }
 
     @DeleteMapping("{id}")

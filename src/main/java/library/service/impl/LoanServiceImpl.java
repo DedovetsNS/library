@@ -4,6 +4,7 @@ import library.exception.NotFoundByIdException;
 import library.exception.NotFoundException;
 import library.model.Loan;
 import library.repository.LoanRepository;
+import library.service.BookService;
 import library.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,13 +20,13 @@ import java.util.List;
 public class LoanServiceImpl implements library.service.LoanService {
     private final LoanRepository loanRepository;
     private final CustomerService customerService;
-    private final BookServiceImpl bookService;
+    private final BookService bookService;
 
     @Value("${library.loanconfig.day}")
     private String delayDays;
 
     @Autowired
-    public LoanServiceImpl(LoanRepository loanRepository, CustomerService customerService, BookServiceImpl bookService) {
+    public LoanServiceImpl(LoanRepository loanRepository, CustomerService customerService, BookService bookService) {
         this.loanRepository = loanRepository;
         this.customerService = customerService;
         this.bookService = bookService;

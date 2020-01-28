@@ -4,6 +4,7 @@ import library.exception.*;
 import library.model.Author;
 import library.model.Book;
 import library.repository.BookRepository;
+import library.service.AuthorService;
 import library.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,10 @@ import java.util.List;
 @Service
 public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
-    private final AuthorServiceImpl authorService;
+    private final AuthorService authorService;
 
     @Autowired
-    public BookServiceImpl(BookRepository bookRepository, AuthorServiceImpl authorService) {
+    public BookServiceImpl(BookRepository bookRepository, AuthorService authorService) {
         this.bookRepository = bookRepository;
         this.authorService = authorService;
     }

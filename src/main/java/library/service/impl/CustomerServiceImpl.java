@@ -7,6 +7,7 @@ import library.exception.NotFoundByIdException;
 import library.model.Customer;
 import library.model.Loan;
 import library.repository.CustomerRepository;
+import library.service.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,7 @@ import java.util.List;
 @Service
 public class CustomerServiceImpl implements library.service.CustomerService {
     private final CustomerRepository customerRepository;
-    private LoanServiceImpl loanService;
+    private LoanService loanService;
 
     @Autowired
     public CustomerServiceImpl(CustomerRepository customerRepository) {
@@ -25,7 +26,7 @@ public class CustomerServiceImpl implements library.service.CustomerService {
     }
 
     @Autowired
-    public void setLoanService(LoanServiceImpl loanService) {
+    public void setLoanService(LoanService loanService) {
         this.loanService = loanService;
     }
 
