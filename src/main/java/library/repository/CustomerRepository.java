@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CustomerRepository extends CrudRepository<Customer, Long> {
@@ -13,5 +14,6 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
 
     Boolean existsByLogin(String login);
 
-    Customer findByLogin(String login);
+    Optional<Customer> findByLogin(String login);
+
 }

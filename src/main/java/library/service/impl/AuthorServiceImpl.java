@@ -1,8 +1,6 @@
 package library.service.impl;
 
-import library.exception.AlreadyExistByNameException;
-import library.exception.EmptyDataBaseException;
-import library.exception.NotFoundByIdException;
+import library.exception.AlreadyExistException;
 import library.exception.NotFoundException;
 import library.model.Author;
 import library.model.Book;
@@ -33,18 +31,14 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public boolean existsByName(String authorName) {
-        if (authorRepository.existsByName(authorName)) {
-            return true;
-        } else {
-            return false;
-        }
+        return authorRepository.existsByName(authorName);
     }
 
     @Transactional
     @Override
     public Author add(Author author) {
         if (authorRepository.existsByName(author.getName())) {
-            throw new AlreadyExistByNameException("Author", author.getName());
+            throw new AlreadyExistException("Author", "name", author.getName());
         } else {
             return authorRepository.save(author);
         }
@@ -53,16 +47,12 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional
     @Override
     public List<Author> findAll() {
-        List<Author> authors = authorRepository.findAll();
-        if (authors.isEmpty()) {
-            throw new EmptyDataBaseException("Authors");
-        }
-        return authors;
+        return authorRepository.findAll();
     }
 
     @Override
     public Author findById(Long id) {
-        return authorRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("Author", id));
+        return authorRepository.findById(id).orElseThrow(() -> new NotFoundException("Author", "id", id.toString()));
     }
 
     @Transactional

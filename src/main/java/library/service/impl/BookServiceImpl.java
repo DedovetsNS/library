@@ -1,6 +1,9 @@
 package library.service.impl;
 
-import library.exception.*;
+import library.exception.AlreadyExistException;
+import library.exception.BadRequestParametrException;
+import library.exception.NotAllAuthorsDataException;
+import library.exception.NotFoundException;
 import library.model.Author;
 import library.model.Book;
 import library.repository.BookRepository;
@@ -28,16 +31,12 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public List<Book> findAll() {
-        List<Book> books = bookRepository.findAll();
-        if (books.isEmpty()) {
-            throw new EmptyDataBaseException("Books");
-        }
-        return books;
+        return bookRepository.findAll();
     }
 
     @Override
     public Book findByName(String bookName) {
-        return bookRepository.findByName(bookName);
+        return bookRepository.findByName(bookName).orElseThrow(()->new NotFoundException("Book", "name", bookName));
     }
 
     @Transactional
@@ -47,7 +46,7 @@ public class BookServiceImpl implements BookService {
         String name = book.getName();
 
         if (bookRepository.existsByName(name)) {
-            throw new AlreadyExistByNameException("Book", name);
+            throw new AlreadyExistException("Book", "name", name);
         }
 
         List<Author> authorsToSave = new ArrayList<>();
@@ -70,7 +69,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book findById(Long id) {
-        return bookRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("Book", id));
+        return bookRepository.findById(id).orElseThrow(() -> new NotFoundException("Book", "id", id.toString()));
     }
 
     @Transactional
@@ -89,14 +88,16 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Integer getQuantityInStockByName(String name) {
-        return bookRepository.getBookByName(name).getInStockQuantity();
+        return bookRepository.findByName(name)
+                .orElseThrow(()->new NotFoundException("Book", "name", name))
+                .getInStockQuantity();
     }
 
     @Transactional
     @Override
     public Book update(Book book) {
         if (existByName(book.getName())) {
-            throw new AlreadyExistByNameException("Book", book.getName());
+            throw new AlreadyExistException("Book", "name", book.getName());
         }
         Book updatableBook = findById(book.getId());
 
@@ -117,7 +118,7 @@ public class BookServiceImpl implements BookService {
         if (getQuantityInStockByName(bookName) < quantity) {
             throw new BadRequestParametrException("Less books in the library than want to take.");
         }
-        Book takedBook = bookRepository.getBookByName(bookName);
+        Book takedBook =bookRepository.findByName(bookName).orElseThrow(()->new NotFoundException("Book", "name", bookName));
         Integer newQuantity = takedBook.getInStockQuantity() - quantity;
         takedBook.setInStockQuantity(newQuantity);
         bookRepository.save(takedBook);
@@ -126,7 +127,7 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public void returnBook(String bookName, Integer quantity) {
-        Book takedBook = bookRepository.getBookByName(bookName);
+        Book takedBook = bookRepository.findByName(bookName).orElseThrow(()->new NotFoundException("Book", "name", bookName));
         Integer newQuantity = takedBook.getInStockQuantity() + quantity;
         takedBook.setInStockQuantity(newQuantity);
         bookRepository.save(takedBook);

@@ -1,6 +1,5 @@
 package library.service.impl;
 
-import library.exception.NotFoundByIdException;
 import library.exception.NotFoundException;
 import library.model.Loan;
 import library.repository.LoanRepository;
@@ -58,7 +57,7 @@ public class LoanServiceImpl implements library.service.LoanService {
 
     @Override
     public Loan findById(Long id) {
-        return loanRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("Loan", id));
+        return loanRepository.findById(id).orElseThrow(() -> new NotFoundException("Loan", "id", id.toString()));
     }
 
     @Override

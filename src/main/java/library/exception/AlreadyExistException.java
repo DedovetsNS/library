@@ -1,11 +1,8 @@
 package library.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
-
-public class AlreadyExistException extends ResponseStatusException {
+public class AlreadyExistException extends RuntimeException {
     public AlreadyExistException(String searchObject, String param, String value) {
-        super(HttpStatus.BAD_REQUEST, searchObject + " with " + param +
+        super(searchObject + " with " + param +
                 " " + value + " is already exist");
     }
 }

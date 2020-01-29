@@ -2,8 +2,7 @@ package library.service.impl;
 
 import library.exception.AlreadyExistException;
 import library.exception.BadRequestParametrException;
-import library.exception.EmptyDataBaseException;
-import library.exception.NotFoundByIdException;
+import library.exception.NotFoundException;
 import library.model.Customer;
 import library.model.Loan;
 import library.repository.CustomerRepository;
@@ -47,21 +46,17 @@ public class CustomerServiceImpl implements library.service.CustomerService {
     @Transactional
     @Override
     public List<Customer> findAll() {
-        List<Customer> customers = customerRepository.findAll();
-        if (customers.isEmpty()) {
-            throw new EmptyDataBaseException("Customers");
-        }
-        return customers;
+        return customerRepository.findAll();
     }
 
     @Override
     public Customer findByLogin(String customerLogin) {
-        return customerRepository.findByLogin(customerLogin);
+        return customerRepository.findByLogin(customerLogin).orElseThrow(()->new NotFoundException("Customer","login",customerLogin));
     }
 
     @Override
     public Customer findById(Long id) {
-        return customerRepository.findById(id).orElseThrow(() -> new NotFoundByIdException("Customer", id));
+        return customerRepository.findById(id).orElseThrow(() -> new NotFoundException("Customer", "id", id.toString()));
     }
 
     @Transactional
