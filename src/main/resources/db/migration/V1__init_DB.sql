@@ -34,19 +34,3 @@ quantity bigint not null,
 book_id bigint not null,
 customer_id bigint not null
 );
-
-alter table if exists book_author
-add constraint author_book_author_fk
-foreign key (author_id) references author;
-
-alter table if exists book_author
-add constraint book_book_author_fk
-foreign key (book_id) references book;
-
-alter table if exists loan
-add constraint loan_book_fk
-foreign key (book_id) references book;
-
-alter table if exists loan
-add constraint loan_customer_fk
-foreign key (customer_id) references customer;
