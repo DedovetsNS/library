@@ -1,32 +1,30 @@
 package library.service.impl;
 
+import library.dto.AuthorDto;
 import library.exception.AlreadyExistException;
 import library.exception.NotFoundException;
 import library.model.Author;
-import library.model.Book;
 import library.repository.AuthorRepository;
+import library.repository.BookAuthorRepository;
 import library.service.AuthorService;
-import library.service.BookService;
+import library.transformer.AuthorTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 @Service
 public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepository authorRepository;
-    private BookService bookService;
+    private final AuthorTransformer authorTransformer;
+    private final BookAuthorRepository bookAuthorRepository;
 
     @Autowired
-    public AuthorServiceImpl(AuthorRepository authorRepository) {
+    public AuthorServiceImpl(AuthorRepository authorRepository, AuthorTransformer authorTransformer, BookAuthorRepository bookAuthorRepository) {
         this.authorRepository = authorRepository;
-    }
-
-    @Autowired
-    public void setBookService(BookService bookService) {
-        this.bookService = bookService;
+        this.authorTransformer = authorTransformer;
+        this.bookAuthorRepository = bookAuthorRepository;
     }
 
     @Override
@@ -36,17 +34,20 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Transactional
     @Override
-    public Author add(Author author) {
-        if (authorRepository.existsByName(author.getName())) {
-            throw new AlreadyExistException("Author", "name", author.getName());
+    public AuthorDto add(AuthorDto authorDto) {
+        if (authorRepository.existsByName(authorDto.getName())) {
+            throw new AlreadyExistException("Author", "name", authorDto.getName());
         } else {
-            return authorRepository.save(author);
+            Author author = authorTransformer.toAuthor(authorDto);
+            author = authorRepository.save(author);
+            return authorTransformer.toAuthorDto(author);
         }
     }
 
+
     @Transactional
     @Override
-    public List<Author> findAll() {
+    public Set<Author> findAll() {
         return authorRepository.findAll();
     }
 
@@ -58,21 +59,18 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional
     @Override
     public void deleteById(Long id) {
-        Author deletedAuthor = findById(id);
-        Collection<Book> books = deletedAuthor.getBooks();
-        for (Book book : books) {
-            bookService.removeAuthor(book, deletedAuthor);
-        }
+        bookAuthorRepository.deleteAllByAuthorId(id);
         authorRepository.deleteById(id);
     }
 
     @Transactional
     @Override
-    public Author update(Author author) {
-        Author updatableAuthor = findById(author.getId());
-        updatableAuthor.setBirthday(author.getBirthday());
-        updatableAuthor.setName(author.getName());
-        return authorRepository.save(updatableAuthor);
+    public AuthorDto update(AuthorDto authorDto) {
+        Author author = findById(authorDto.getId());
+
+        author.setBirthday(authorDto.getBirthday());
+        author.setName(authorDto.getName());
+        return authorTransformer.toAuthorDto(authorRepository.save(author));
     }
 
     @Override

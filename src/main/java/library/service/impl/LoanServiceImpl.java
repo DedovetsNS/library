@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class LoanServiceImpl implements library.service.LoanService {
@@ -51,7 +51,7 @@ public class LoanServiceImpl implements library.service.LoanService {
     }
 
     @Override
-    public List<Loan> findAll() {
+    public Set<Loan> findAll() {
         return loanRepository.findAll();
     }
 
@@ -73,9 +73,9 @@ public class LoanServiceImpl implements library.service.LoanService {
 
     @Transactional
     @Override
-    public List<Loan> getExpiredLoans() {
-        List<Loan> loans = loanRepository.findAll();
-        List<Loan> expiredLoans = new ArrayList<>();
+    public Set<Loan> getExpiredLoans() {
+        Set<Loan> loans = loanRepository.findAll();
+        Set<Loan> expiredLoans = new HashSet<>();
 
         for (Loan loan : loans) {
             LocalDate takeDate = loan.getDate().toInstant().atZone(ZoneId.systemDefault())
@@ -87,5 +87,10 @@ public class LoanServiceImpl implements library.service.LoanService {
             }
         }
         return expiredLoans;
+    }
+
+    @Override
+    public Set<Loan> getLoansByCustomerId(Long id) {
+       return loanRepository.findByCustomerId(id);
     }
 }

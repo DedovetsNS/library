@@ -13,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/author")
@@ -29,9 +30,7 @@ public class AuthorController {
     @JsonView(Details.class)
     @PostMapping
     public AuthorDto add(@RequestBody @Validated({Add.class}) AuthorDto authorDto) {
-        Author addAuthor = authorTransformer.toAuthor(authorDto);
-        addAuthor = authorService.add(addAuthor);
-        return authorTransformer.toAuthorDto(addAuthor);
+        return authorService.add(authorDto);
     }
 
     @JsonView(Details.class)
@@ -50,8 +49,8 @@ public class AuthorController {
 
     @JsonView(Details.class)
     @GetMapping
-    public List<AuthorDto> findAll() {
-        List<Author> authors = authorService.findAll();
+    public Set<AuthorDto> findAll() {
+        Set<Author> authors = authorService.findAll();
         return authorTransformer.toAuthorDto(authors);
     }
 
@@ -63,8 +62,6 @@ public class AuthorController {
     @JsonView(Details.class)
     @PutMapping
     public AuthorDto updateById(@RequestBody @Validated({Update.class}) AuthorDto authorDto) {
-        Author author = authorTransformer.toAuthor(authorDto);
-        author = authorService.update(author);
-        return authorTransformer.toAuthorDto(author);
+        return authorService.update(authorDto);
     }
 }

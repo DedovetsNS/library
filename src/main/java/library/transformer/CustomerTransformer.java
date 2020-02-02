@@ -2,16 +2,29 @@ package library.transformer;
 
 import library.dto.CustomerDto;
 import library.model.Customer;
+import library.model.Loan;
+import library.repository.LoanRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class CustomerTransformer {
 
+    private final LoanRepository loanRepository;
+
+    @Autowired
+    public CustomerTransformer(LoanRepository loanRepository) {
+        this.loanRepository = loanRepository;
+    }
+
     public Customer toCustomer(CustomerDto customerDto) {
-        Customer customer = Customer.builder()
+        return Customer.builder()
                 .id(customerDto.getId())
                 .login(customerDto.getLogin())
                 .firstName(customerDto.getFirstName())
@@ -20,16 +33,13 @@ public class CustomerTransformer {
                 .phone(customerDto.getPhone())
                 .addres(customerDto.getAddres())
                 .build();
-        return customer;
     }
 
     public CustomerDto toCustomerDto(Customer customer) {
-        List<Long> loansId = new ArrayList<>();
-        if (customer.getLoans() != null) {
-            customer.getLoans().forEach(loan -> loansId.add(loan.getId()));
-        }
+        Set<Loan> loans = loanRepository.findAllByCustomerId(customer.getId());
+        Set<Long> loansId = loans.stream().map(Loan::getId).collect(Collectors.toSet());
 
-        CustomerDto customerDto = CustomerDto.builder()
+        return CustomerDto.builder()
                 .id(customer.getId())
                 .login(customer.getLogin())
                 .firstName(customer.getFirstName())
@@ -39,12 +49,11 @@ public class CustomerTransformer {
                 .phone(customer.getPhone())
                 .loansId(loansId)
                 .build();
-        return customerDto;
     }
 
     public List<CustomerDto> toCustomerDto(List<Customer> customer) {
         List<CustomerDto> customerDto = new ArrayList<>();
-        customer.stream().forEach(customer1 -> customerDto.add(toCustomerDto(customer1)));
+        customer.forEach(customer1 -> customerDto.add(toCustomerDto(customer1)));
         return customerDto;
     }
 }

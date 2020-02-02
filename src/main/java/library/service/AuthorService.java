@@ -1,21 +1,22 @@
 package library.service;
 
+import library.dto.AuthorDto;
 import library.model.Author;
 
-import java.util.List;
+import java.util.Set;
 
 public interface AuthorService {
     boolean existsByName(String authorName);
 
-    Author add(Author author);
+    AuthorDto add(AuthorDto authorDto);
 
-    List<Author> findAll();
+    Set<Author> findAll();
 
     Author findById(Long id);
 
     void deleteById(Long id);
 
-    Author update(Author author);
+    AuthorDto update(AuthorDto authorDto);
 
     Author findByName(String name);
 }

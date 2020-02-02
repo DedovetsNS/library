@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/loan")
@@ -35,8 +36,8 @@ public class LoanController {
 
     @JsonView(Details.class)
     @GetMapping
-    public List<LoanDto> findAll() {
-        List<Loan> loans = loanService.findAll();
+    public Set<LoanDto> findAll() {
+        Set<Loan> loans = loanService.findAll();
         return loanTransformer.toLoanDto(loans);
     }
 
@@ -55,8 +56,8 @@ public class LoanController {
 
     @JsonView(Details.class)
     @GetMapping("/expired")
-    public List<LoanDto> findExpired() {
-        List<Loan> loans = loanService.getExpiredLoans();
+    public Set<LoanDto> findExpired() {
+        Set<Loan> loans = loanService.getExpiredLoans();
         return loanTransformer.toLoanDto(loans);
     }
 }

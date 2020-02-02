@@ -13,6 +13,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.util.Collection;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -59,5 +60,5 @@ public class CustomerDto {
     @Null(groups = Update.class)
     @JsonView(Details.class)
     @Null(groups = {Add.class})
-    private Collection<Long> loansId;
+    private Set<Long> loansId;
 }

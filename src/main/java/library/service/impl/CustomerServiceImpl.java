@@ -6,22 +6,24 @@ import library.exception.NotFoundException;
 import library.model.Customer;
 import library.model.Loan;
 import library.repository.CustomerRepository;
+import library.repository.LoanRepository;
 import library.service.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
 
 @Service
 public class CustomerServiceImpl implements library.service.CustomerService {
     private final CustomerRepository customerRepository;
+    private final LoanRepository loanRepository;
     private LoanService loanService;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, LoanRepository loanRepository) {
         this.customerRepository = customerRepository;
+        this.loanRepository = loanRepository;
     }
 
     @Autowired
@@ -62,13 +64,8 @@ public class CustomerServiceImpl implements library.service.CustomerService {
     @Transactional
     @Override
     public void deleteById(Long id) {
-        Customer deletedCustomer = findById(id);
-        Collection<Loan> loans = deletedCustomer.getLoans();
-
-        for (Loan loan : loans) {
-            if (loanService.existById(loan.getId())) {
-                throw new BadRequestParametrException("Cannot delete a customer who has loans.");
-            }
+        if(loanRepository.existsByCustomerId(id)){
+            throw new BadRequestParametrException("Cannot delete a customer who has loans.");
         }
         customerRepository.deleteById(id);
     }

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Set;
 
 @Component
 public class RemindMailSender {
@@ -24,7 +24,7 @@ public class RemindMailSender {
 
     @Scheduled(cron = "${library.remind.cron}")
     private void sendRemindMail() {
-        List<Loan> expiredLoans = loanService.getExpiredLoans();
+        Set<Loan> expiredLoans = loanService.getExpiredLoans();
         for (Loan loan : expiredLoans) {
             String mail = loan.getCustomer().getEmail();
             String name = loan.getCustomer().getFirstName() + " " + loan.getCustomer().getLastName();

@@ -1,6 +1,6 @@
 package library.service;
 
-import library.model.Author;
+import library.dto.BookDto;
 import library.model.Book;
 
 import java.util.List;
@@ -10,7 +10,7 @@ public interface BookService {
 
     Book findByName(String bookName);
 
-    Book add(Book book);
+    BookDto add(BookDto bookDto);
 
     Book findById(Long id);
 
@@ -20,11 +20,10 @@ public interface BookService {
 
     Integer getQuantityInStockByName(String name);
 
-    Book update(Book book);
+    BookDto update(BookDto bookDto);
 
     void takeBookToLoan(String bookName, Integer quantity);
 
     void returnBook(String bookName, Integer quantity);
 
-    void removeAuthor(Book book, Author deletedAuthor);
 }

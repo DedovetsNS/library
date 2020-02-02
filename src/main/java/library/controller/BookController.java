@@ -7,7 +7,6 @@ import library.dto.groups.Details;
 import library.dto.groups.Update;
 import library.model.Book;
 import library.service.BookService;
-import library.service.EmailService;
 import library.service.impl.BookServiceImpl;
 import library.service.impl.EmailServiceImpl;
 import library.transformer.BookTransformer;
@@ -22,21 +21,17 @@ import java.util.List;
 public class BookController {
     private final BookService bookService;
     private final BookTransformer bookTransformer;
-    private final EmailService emailService;
 
     @Autowired
     public BookController(BookServiceImpl bookService, BookTransformer bookTransformer, EmailServiceImpl emailService) {
         this.bookService = bookService;
         this.bookTransformer = bookTransformer;
-        this.emailService = emailService;
     }
 
     @JsonView(Details.class)
     @PostMapping
     public BookDto add(@RequestBody @Validated({Add.class}) BookDto bookDto) {
-        Book book = bookTransformer.toBook(bookDto);
-        book = bookService.add(book);
-        return bookTransformer.toBookDto(book);
+        return bookService.add(bookDto);
     }
 
     @JsonView(Details.class)
@@ -61,8 +56,6 @@ public class BookController {
     @JsonView(Details.class)
     @PutMapping
     public BookDto updateById(@RequestBody @Validated({Update.class}) BookDto bookDto) {
-        Book book = bookTransformer.toBook(bookDto);
-        book = bookService.update(book);
-        return bookTransformer.toBookDto(book);
+        return bookService.update(bookDto);
     }
 }

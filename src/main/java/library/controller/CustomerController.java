@@ -10,6 +10,7 @@ import library.dto.groups.Update;
 import library.model.Customer;
 import library.model.Loan;
 import library.service.CustomerService;
+import library.service.LoanService;
 import library.transformer.CustomerTransformer;
 import library.transformer.LoanTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/customer")
@@ -24,12 +26,14 @@ public class CustomerController {
     private final CustomerService customerService;
     private final CustomerTransformer customerTransformer;
     private final LoanTransformer loanTransformer;
+    private final LoanService loanService;
 
     @Autowired
-    public CustomerController(CustomerService customerService, CustomerTransformer customerTransformer, LoanTransformer loanTransformer) {
+    public CustomerController(CustomerService customerService, CustomerTransformer customerTransformer, LoanTransformer loanTransformer, LoanService loanService) {
         this.customerService = customerService;
         this.customerTransformer = customerTransformer;
         this.loanTransformer = loanTransformer;
+        this.loanService = loanService;
     }
 
     @PostMapping
@@ -51,8 +55,7 @@ public class CustomerController {
     @GetMapping("{id}")
     public CustomerDto getById(@PathVariable("id") Long id) {
         Customer customer = customerService.findById(id);
-        CustomerDto customerDto = customerTransformer.toCustomerDto(customer);
-        return customerDto;
+        return customerTransformer.toCustomerDto(customer);
     }
 
     @DeleteMapping("{id}")
@@ -70,9 +73,8 @@ public class CustomerController {
 
     @JsonView(Details.class)
     @GetMapping("{id}/loans")
-    public List<LoanDto> getLoansById(@PathVariable("id") Long id) {
-        Customer customer = customerService.findById(id);
-        List<Loan> loans = (List<Loan>) customer.getLoans();
+    public Set<LoanDto> getLoansById(@PathVariable("id") Long id) {
+        Set<Loan> loans = loanService.getLoansByCustomerId(id);
         return loanTransformer.toLoanDto(loans);
     }
 }

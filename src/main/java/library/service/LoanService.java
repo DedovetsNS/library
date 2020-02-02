@@ -2,14 +2,14 @@ package library.service;
 
 import library.model.Loan;
 
-import java.util.List;
+import java.util.Set;
 
 public interface LoanService {
     Loan takeLoan(Loan loan);
 
     void returnLoan(Long id);
 
-    List<Loan> findAll();
+    Set<Loan> findAll();
 
     Loan findById(Long id);
 
@@ -17,5 +17,7 @@ public interface LoanService {
 
     boolean existById(Long id);
 
-    List<Loan> getExpiredLoans();
+    Set<Loan> getExpiredLoans();
+
+    Set<Loan> getLoansByCustomerId(Long id);
 }

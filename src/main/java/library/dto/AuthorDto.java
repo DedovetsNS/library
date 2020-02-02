@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
-import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -36,5 +36,5 @@ public class AuthorDto {
     @JsonView(Details.class)
     @Null(groups = {Add.class})
     @Null(groups = {Update.class})
-    private Collection<BookInAuthorDto> books;
+    private Set<BookInAuthorDto> books;
 }

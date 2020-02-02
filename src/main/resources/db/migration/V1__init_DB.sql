@@ -34,3 +34,4 @@ quantity bigint not null,
 book_id bigint not null,
 customer_id bigint not null
 );
+

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
-import java.util.Collection;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -24,27 +24,32 @@ public class BookDto {
 
     @NotNull(groups = Update.class)
     @JsonView(Details.class)
+    @NotNull(groups = {Add.class})
     @NotNull
     private String name;
 
     @NotNull(groups = Update.class)
     @JsonView(Details.class)
+    @NotNull(groups = {Add.class})
     @NotNull
     private String publisher;
 
     @NotNull(groups = Update.class)
     @JsonView(Details.class)
+    @NotNull(groups = {Add.class})
     @NotNull
     private Integer totalQuantity;
 
     @NotNull(groups = Update.class)
     @JsonView(Details.class)
+    @NotNull(groups = {Add.class})
     @NotNull
     private Integer inStockQuantity;
 
     @NotNull(groups = Update.class)
     @JsonView(Details.class)
+    @NotNull(groups = {Add.class})
     @NotNull
-    private Collection<AuthorInBookDto> authors;
+    private Set<AuthorInBookDto> authors;
 }
 

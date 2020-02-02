@@ -7,9 +7,7 @@ import library.service.impl.BookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class LoanTransformer {
@@ -48,8 +46,8 @@ public class LoanTransformer {
         return loanDto;
     }
 
-    public List<LoanDto> toLoanDto(List<Loan> loans) {
-        List<LoanDto> loansDto = new ArrayList<>();
+    public Set<LoanDto> toLoanDto(Set<Loan> loans) {
+        Set<LoanDto> loansDto = new HashSet<>();
 
         loans.forEach(loan -> loansDto.add(toLoanDto(loan)));
         return loansDto;

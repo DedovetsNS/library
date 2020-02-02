@@ -23,12 +23,4 @@ public class Book implements Serializable {
     private Integer totalQuantity;
     private Integer inStockQuantity;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "book_author",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "author_id"))
-    private Collection<Author> authors;
-
-    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
-    private Collection<Loan> loans;
 }
