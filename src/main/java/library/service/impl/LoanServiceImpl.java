@@ -66,11 +66,6 @@ public class LoanServiceImpl implements library.service.LoanService {
         loanRepository.deleteById(id);
     }
 
-    @Override
-    public boolean existById(Long id) {
-        return loanRepository.existsById(id);
-    }
-
     @Transactional
     @Override
     public Set<Loan> getExpiredLoans() {
@@ -91,6 +86,6 @@ public class LoanServiceImpl implements library.service.LoanService {
 
     @Override
     public Set<Loan> getLoansByCustomerId(Long id) {
-       return loanRepository.findByCustomerId(id);
+        return loanRepository.findByCustomerId(id);
     }
 }

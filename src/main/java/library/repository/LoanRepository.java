@@ -3,7 +3,6 @@ package library.repository;
 import library.model.Loan;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
 import java.util.Set;
 
 public interface LoanRepository extends CrudRepository<Loan, Long> {

@@ -13,6 +13,7 @@ total_quantity bigint not null
 );
 
 create table book_author (
+id  bigserial primary key,
 book_id bigint not null,
 author_id bigint not null
 );
@@ -35,3 +36,11 @@ book_id bigint not null,
 customer_id bigint not null
 );
 
+alter table if exists loan
+add constraint loan_book
+foreign key (book_id) references book;
+
+alter table if exists loan
+add constraint loan_customer
+foreign key (customer_id)
+references customer;

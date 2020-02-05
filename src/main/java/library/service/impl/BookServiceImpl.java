@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -53,10 +52,9 @@ public class BookServiceImpl implements BookService {
         this.loanRepository = loanRepository;
     }
 
-
     @Transactional
     @Override
-    public List<Book> findAll() {
+    public Set<Book> findAll() {
         return bookRepository.findAll();
     }
 
@@ -127,8 +125,8 @@ public class BookServiceImpl implements BookService {
     public BookDto update(BookDto bookDto) {
         String name = bookDto.getName();
 
-        if (existByName(name)&&
-                (bookRepository.findByName(name).get().getId()!=bookDto.getId())) {
+        if (existByName(name) &&
+                (bookRepository.findByName(name).get().getId() != bookDto.getId())) {
             throw new AlreadyExistException("Book", "name", bookDto.getName());
         }
         Long bookId = bookDto.getId();

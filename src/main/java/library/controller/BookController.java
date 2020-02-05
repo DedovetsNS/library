@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(path = "/book")
@@ -36,8 +36,8 @@ public class BookController {
 
     @JsonView(Details.class)
     @GetMapping
-    public List<BookDto> findAll() {
-        List<Book> allBooks = bookService.findAll();
+    public Set<BookDto> findAll() {
+        Set<Book> allBooks = bookService.findAll();
         return bookTransformer.toBookDto(allBooks);
     }
 

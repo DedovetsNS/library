@@ -3,6 +3,7 @@ package library.service.impl;
 import library.model.BookAuthor;
 import library.repository.BookAuthorRepository;
 import library.service.BookAuthorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -11,6 +12,7 @@ import java.util.Set;
 public class BookAuthorServiceImpl implements BookAuthorService {
     private final BookAuthorRepository bookAuthorRepository;
 
+    @Autowired
     public BookAuthorServiceImpl(BookAuthorRepository bookAuthorRepository) {
         this.bookAuthorRepository = bookAuthorRepository;
     }
@@ -27,10 +29,10 @@ public class BookAuthorServiceImpl implements BookAuthorService {
 
     @Override
     public void saveAuthorInBook(Long authorId, Long bookId) {
-            BookAuthor bookAuthor = new BookAuthor();
-            bookAuthor.setAuthorId(authorId);
-            bookAuthor.setBookId(bookId);
-            bookAuthorRepository.save(bookAuthor);
+        BookAuthor bookAuthor = new BookAuthor();
+        bookAuthor.setAuthorId(authorId);
+        bookAuthor.setBookId(bookId);
+        bookAuthorRepository.save(bookAuthor);
     }
 
 

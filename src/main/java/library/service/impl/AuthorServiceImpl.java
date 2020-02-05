@@ -27,11 +27,6 @@ public class AuthorServiceImpl implements AuthorService {
         this.bookAuthorRepository = bookAuthorRepository;
     }
 
-    @Override
-    public boolean existsByName(String authorName) {
-        return authorRepository.existsByName(authorName);
-    }
-
     @Transactional
     @Override
     public AuthorDto add(AuthorDto authorDto) {

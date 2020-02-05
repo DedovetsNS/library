@@ -15,8 +15,6 @@ public interface LoanService {
 
     void deleteById(Long id);
 
-    boolean existById(Long id);
-
     Set<Loan> getExpiredLoans();
 
     Set<Loan> getLoansByCustomerId(Long id);

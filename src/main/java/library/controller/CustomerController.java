@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -45,10 +44,9 @@ public class CustomerController {
 
     @JsonView(Details.class)
     @GetMapping
-    public List<CustomerDto> findAll() {
-        List<Customer> customers = customerService.findAll();
-        List<CustomerDto> customersDto = customerTransformer.toCustomerDto(customers);
-        return customersDto;
+    public Set<CustomerDto> findAll() {
+        Set<Customer> customers = customerService.findAll();
+        return customerTransformer.toCustomerDto(customers);
     }
 
     @JsonView(Details.class)

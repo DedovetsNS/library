@@ -3,10 +3,10 @@ package library.service;
 import library.dto.BookDto;
 import library.model.Book;
 
-import java.util.List;
+import java.util.Set;
 
 public interface BookService {
-    List<Book> findAll();
+    Set<Book> findAll();
 
     Book findByName(String bookName);
 

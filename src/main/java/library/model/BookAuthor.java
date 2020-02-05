@@ -14,10 +14,6 @@ public class BookAuthor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long bookId;
     private Long authorId;
-
-
-
 }

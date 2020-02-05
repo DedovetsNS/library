@@ -2,14 +2,14 @@ package library.service;
 
 import library.model.Customer;
 
-import java.util.List;
+import java.util.Set;
 
 public interface CustomerService {
     Customer add(Customer customer);
 
     boolean existByLogin(String login);
 
-    List<Customer> findAll();
+    Set<Customer> findAll();
 
     Customer findByLogin(String customerLogin);
 

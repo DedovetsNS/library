@@ -9,17 +9,18 @@ import library.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class AuthorTransformer {
 
     private final BookRepository bookRepository;
-    private  BookTransformer bookTransformer;
-
+    private BookTransformer bookTransformer;
 
     @Autowired
-    public AuthorTransformer( BookRepository bookRepository) {
+    public AuthorTransformer(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
@@ -38,7 +39,7 @@ public class AuthorTransformer {
 
     public AuthorDto toAuthorDto(Author author) {
         AuthorDto authorDto = new AuthorDto();
-        Set<Book> books =  bookRepository.findBooksInAuthor(author.getId());
+        Set<Book> books = bookRepository.findBooksInAuthor(author.getId());
         Set<BookInAuthorDto> booksInAuthorDto = bookTransformer.toBookInAuthorDto(books);
         authorDto.setId(author.getId());
         authorDto.setName(author.getName());
@@ -53,11 +54,11 @@ public class AuthorTransformer {
         return authorsDto;
     }
 
-    public AuthorInBookDto toAuthorInBookDto (Author author) {
+    private AuthorInBookDto toAuthorInBookDto(Author author) {
         return new AuthorInBookDto(author.getId(), author.getName(), author.getBirthday());
     }
 
-    public Set<AuthorInBookDto> toAuthorInBookDto(Collection<Author> authors){
+    Set<AuthorInBookDto> toAuthorInBookDto(Collection<Author> authors) {
         Set<AuthorInBookDto> authorsInBookDto = new HashSet<>();
         for (Author author : authors) {
             authorsInBookDto.add(toAuthorInBookDto(author));
@@ -74,8 +75,4 @@ public class AuthorTransformer {
         authorDto.setBooks(booksInAuthorDto);
         return authorDto;
     }
-
-
-
-
 }

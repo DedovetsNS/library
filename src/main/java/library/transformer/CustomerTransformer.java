@@ -7,9 +7,7 @@ import library.repository.LoanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -51,8 +49,8 @@ public class CustomerTransformer {
                 .build();
     }
 
-    public List<CustomerDto> toCustomerDto(List<Customer> customer) {
-        List<CustomerDto> customerDto = new ArrayList<>();
+    public Set<CustomerDto> toCustomerDto(Set<Customer> customer) {
+        Set<CustomerDto> customerDto = new HashSet<>();
         customer.forEach(customer1 -> customerDto.add(toCustomerDto(customer1)));
         return customerDto;
     }

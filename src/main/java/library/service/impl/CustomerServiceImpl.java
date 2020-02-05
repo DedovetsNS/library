@@ -4,31 +4,23 @@ import library.exception.AlreadyExistException;
 import library.exception.BadRequestParametrException;
 import library.exception.NotFoundException;
 import library.model.Customer;
-import library.model.Loan;
 import library.repository.CustomerRepository;
 import library.repository.LoanRepository;
-import library.service.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
 public class CustomerServiceImpl implements library.service.CustomerService {
     private final CustomerRepository customerRepository;
     private final LoanRepository loanRepository;
-    private LoanService loanService;
 
     @Autowired
     public CustomerServiceImpl(CustomerRepository customerRepository, LoanRepository loanRepository) {
         this.customerRepository = customerRepository;
         this.loanRepository = loanRepository;
-    }
-
-    @Autowired
-    public void setLoanService(LoanService loanService) {
-        this.loanService = loanService;
     }
 
     @Transactional
@@ -47,13 +39,13 @@ public class CustomerServiceImpl implements library.service.CustomerService {
 
     @Transactional
     @Override
-    public List<Customer> findAll() {
+    public Set<Customer> findAll() {
         return customerRepository.findAll();
     }
 
     @Override
     public Customer findByLogin(String customerLogin) {
-        return customerRepository.findByLogin(customerLogin).orElseThrow(()->new NotFoundException("Customer","login",customerLogin));
+        return customerRepository.findByLogin(customerLogin).orElseThrow(() -> new NotFoundException("Customer", "login", customerLogin));
     }
 
     @Override
@@ -64,7 +56,7 @@ public class CustomerServiceImpl implements library.service.CustomerService {
     @Transactional
     @Override
     public void deleteById(Long id) {
-        if(loanRepository.existsByCustomerId(id)){
+        if (loanRepository.existsByCustomerId(id)) {
             throw new BadRequestParametrException("Cannot delete a customer who has loans.");
         }
         customerRepository.deleteById(id);

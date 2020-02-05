@@ -9,13 +9,15 @@ import library.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class BookTransformer {
 
     private final AuthorRepository authorRepository;
-    private  AuthorTransformer authorTransformer;
+    private AuthorTransformer authorTransformer;
 
     @Autowired
     public BookTransformer(AuthorRepository authorRepository) {
@@ -52,8 +54,8 @@ public class BookTransformer {
         return bookDto;
     }
 
-    public List<BookDto> toBookDto(List<Book> allBooks) {
-        List<BookDto> allBooksDto = new ArrayList<>();
+    public Set<BookDto> toBookDto(Set<Book> allBooks) {
+        Set<BookDto> allBooksDto = new HashSet<>();
 
         for (Book book : allBooks) {
             BookDto bookDto = toBookDto(book);
@@ -70,12 +72,11 @@ public class BookTransformer {
         return bookInAuthorDto;
     }
 
-    Set<BookInAuthorDto> toBookInAuthorDto(Collection<Book> books){
+    Set<BookInAuthorDto> toBookInAuthorDto(Collection<Book> books) {
         Set<BookInAuthorDto> bookInAuthorDtos = new HashSet<>();
         for (Book book : books) {
             bookInAuthorDtos.add(toBookInAuthorDto(book));
         }
         return bookInAuthorDtos;
     }
-
 }

@@ -25,11 +25,13 @@ public class AuthorDto {
     private Long id;
 
     @JsonView(Details.class)
+    @NotNull(groups = {Add.class})
     @NotNull
     private String name;
 
     @JsonView(Details.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
+    @NotNull(groups = {Add.class})
     @NotNull
     private Date birthday;
 

@@ -6,7 +6,6 @@ import library.model.Author;
 import java.util.Set;
 
 public interface AuthorService {
-    boolean existsByName(String authorName);
 
     AuthorDto add(AuthorDto authorDto);
 
