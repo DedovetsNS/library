@@ -23,7 +23,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendSimpleMessage(String to, String subject, String text) {
         MessageDto message = new MessageDto(to, subject, text);
-        admin.declareQueue(new Queue("aaa"));
+        admin.declareQueue(new Queue("query-library-mail-send"));
         template.convertSendAndReceive("query-library-mail-send", message);
     }
 }
