@@ -6,9 +6,9 @@ import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class EmailServiceImpl implements EmailService {
 
     private final AmqpTemplate template;
@@ -24,7 +24,7 @@ public class EmailServiceImpl implements EmailService {
     public void sendSimpleMessage(String to, String subject, String text) {
         MessageDto message = new MessageDto(to, subject, text);
         admin.declareQueue(new Queue("query-library-mail-send"));
-        template.convertSendAndReceive("query-library-mail-send", message);
+        template.convertAndSend("query-library-mail-send", message);
     }
 }
 

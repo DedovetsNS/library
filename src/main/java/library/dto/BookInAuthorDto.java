@@ -19,4 +19,7 @@ public class BookInAuthorDto {
 
     @JsonView(Details.class)
     private String publisher;
+
+    @JsonView(Details.class)
+    private Boolean specificAccess;
 }

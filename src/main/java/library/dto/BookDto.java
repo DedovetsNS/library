@@ -51,5 +51,11 @@ public class BookDto {
     @NotNull(groups = {Add.class})
     @NotNull
     private Set<AuthorInBookDto> authors;
+
+    @NotNull(groups = Update.class)
+    @JsonView(Details.class)
+    @NotNull(groups = {Add.class})
+    @NotNull
+    private Boolean specificAccess;
 }
 

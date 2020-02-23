@@ -21,5 +21,6 @@ public class Book implements Serializable {
     private String publisher;
     private Integer totalQuantity;
     private Integer inStockQuantity;
+    private Boolean specificAccess;
 
 }

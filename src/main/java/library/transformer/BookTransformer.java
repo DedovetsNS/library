@@ -51,6 +51,7 @@ public class BookTransformer {
         bookDto.setAuthors(authorsInBookDto);
         bookDto.setTotalQuantity(book.getTotalQuantity());
         bookDto.setInStockQuantity(book.getInStockQuantity());
+        bookDto.setSpecificAccess(book.getSpecificAccess());
         return bookDto;
     }
 
@@ -69,6 +70,7 @@ public class BookTransformer {
         bookInAuthorDto.setId(book.getId());
         bookInAuthorDto.setName(book.getName());
         bookInAuthorDto.setPublisher(book.getPublisher());
+        bookInAuthorDto.setSpecificAccess(book.getSpecificAccess());
         return bookInAuthorDto;
     }
 

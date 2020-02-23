@@ -1,10 +1,12 @@
 package library.service.impl;
 
+import library.exception.BadRequestParametrException;
 import library.exception.NotFoundException;
 import library.model.Loan;
 import library.repository.LoanRepository;
 import library.service.BookService;
 import library.service.CustomerService;
+import library.service.HistorianService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,15 +22,17 @@ public class LoanServiceImpl implements library.service.LoanService {
     private final LoanRepository loanRepository;
     private final CustomerService customerService;
     private final BookService bookService;
+    private final HistorianService historianService;
 
     @Value("${library.loanconfig.day}")
     private String delayDays;
 
     @Autowired
-    public LoanServiceImpl(LoanRepository loanRepository, CustomerService customerService, BookService bookService) {
+    public LoanServiceImpl(LoanRepository loanRepository, CustomerService customerService, BookService bookService, HistorianService historianService) {
         this.loanRepository = loanRepository;
         this.customerService = customerService;
         this.bookService = bookService;
+        this.historianService = historianService;
     }
 
     @Transactional
@@ -37,6 +41,14 @@ public class LoanServiceImpl implements library.service.LoanService {
         String customerLogin = loan.getCustomer().getLogin();
         if (!customerService.existByLogin(customerLogin)) {
             throw new NotFoundException("Customer", "login", customerLogin);
+        }
+        String customerFirstName = loan.getCustomer().getFirstName();
+        String customerLastName = loan.getCustomer().getLastName();
+        String bookName = loan.getBook().getName();
+
+        if(! historianService.checkHistorianAccess(customerFirstName,customerLastName)){
+         throw new BadRequestParametrException(
+                 "this customer ["+customerFirstName+" "+customerLastName+"] don't have access to this book ["+bookName+"]");
         }
         bookService.takeBookToLoan(loan.getBook().getName(), loan.getQuantity());
         return loanRepository.save(loan);
