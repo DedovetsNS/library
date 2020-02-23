@@ -6,8 +6,6 @@ plugins {
 	id "org.flywaydb.flyway" version "6.2.0"
 }
 
-group = 'library'
-version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 repositories {
@@ -26,9 +24,12 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compileOnly 'org.projectlombok:lombok:1.18.4'
 	implementation 'org.springframework.boot:spring-boot-configuration-processor'
+	compile "org.springframework.cloud:spring-cloud-starter-openfeign:2.0.2.RELEASE"
 }
 lombok {
 	version = '1.18.4'
 	sha256 = ""
 }
+
+bootJar { mainClassName = 'library.library.LibraryApplication'}
 
