@@ -20,7 +20,7 @@ author_id bigint not null
 
 create table customer (
 id  bigserial primary key,
-addres varchar(255) not null,
+address varchar(255) not null,
 email varchar(255) not null,
 first_name varchar(255) not null,
 last_name varchar(255) not null,

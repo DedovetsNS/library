@@ -29,7 +29,7 @@ public class RemindMailSender {
             String mail = loan.getCustomer().getEmail();
             String name = loan.getCustomer().getFirstName() + " " + loan.getCustomer().getLastName();
             String bookName = loan.getBook().getName();
-            String message = String.format("Hello dear %s, remind you that you have taken book " +
+            String message = String.format("Hello dear %s, remind that you have taken book " +
                     "%s from the library and its expiration date has ended ", name, bookName);
             emailService.sendSimpleMessage(mail, "Library reminder", message);
         }

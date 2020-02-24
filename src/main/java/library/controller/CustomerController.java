@@ -11,8 +11,8 @@ import library.model.Customer;
 import library.model.Loan;
 import library.service.CustomerService;
 import library.service.LoanService;
-import library.transformer.CustomerTransformer;
-import library.transformer.LoanTransformer;
+import library.transformer.impl.CustomerTransformer;
+import library.transformer.impl.LoanTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -37,23 +37,23 @@ public class CustomerController {
 
     @PostMapping
     public CustomerDto add(@RequestBody @Validated(Add.class) CustomerDto customerDto) {
-        Customer customer = customerTransformer.toCustomer(customerDto);
+        Customer customer = customerTransformer.toEntity(customerDto);
         customer = customerService.add(customer);
-        return customerTransformer.toCustomerDto(customer);
+        return customerTransformer.toDto(customer);
     }
 
     @JsonView(Details.class)
     @GetMapping
     public Set<CustomerDto> findAll() {
         Set<Customer> customers = customerService.findAll();
-        return customerTransformer.toCustomerDto(customers);
+        return customerTransformer.toDto(customers);
     }
 
     @JsonView(Details.class)
     @GetMapping("{id}")
     public CustomerDto getById(@PathVariable("id") Long id) {
         Customer customer = customerService.findById(id);
-        return customerTransformer.toCustomerDto(customer);
+        return customerTransformer.toDto(customer);
     }
 
     @DeleteMapping("{id}")
@@ -64,15 +64,22 @@ public class CustomerController {
     @JsonView(Details.class)
     @PutMapping
     public CustomerDto updateById(@RequestBody @Validated({Update.class}) CustomerDto customerDto) {
-        Customer customer = customerTransformer.toCustomer(customerDto);
+        Customer customer = customerTransformer.toEntity(customerDto);
         customer = customerService.update(customer);
-        return customerTransformer.toCustomerDto(customer);
+        return customerTransformer.toDto(customer);
     }
 
     @JsonView(Details.class)
     @GetMapping("{id}/loans")
     public Set<LoanDto> getLoansById(@PathVariable("id") Long id) {
         Set<Loan> loans = loanService.getLoansByCustomerId(id);
-        return loanTransformer.toLoanDto(loans);
+        return loanTransformer.toDto(loans);
+    }
+
+    @JsonView(Details.class)
+    @GetMapping("/withAccess")
+    public Set<CustomerDto> findAllWithAccess() {
+        Set<Customer> customers = customerService.findAllWithAccess();
+        return customerTransformer.toDto(customers);
     }
 }

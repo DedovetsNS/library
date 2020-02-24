@@ -15,8 +15,8 @@ import library.repository.LoanRepository;
 import library.service.AuthorService;
 import library.service.BookAuthorService;
 import library.service.BookService;
-import library.transformer.AuthorTransformer;
-import library.transformer.BookTransformer;
+import library.transformer.impl.AuthorTransformer;
+import library.transformer.impl.BookTransformer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,9 +87,9 @@ public class BookServiceImpl implements BookService {
                 authorsToSaveId.add(authorDto.getId());
             }
         }
-        Book book = bookRepository.save(bookTransformer.toBook(bookDto));
+        Book book = bookRepository.save(bookTransformer.toEntity(bookDto));
         bookAuthorService.saveAuthorsInBook(authorsToSaveId, book.getId());
-        return bookTransformer.toBookDto(book);
+        return bookTransformer.toDto(book);
     }
 
     @Override
@@ -126,7 +126,7 @@ public class BookServiceImpl implements BookService {
         String name = bookDto.getName();
 
         if (existByName(name) &&
-                (bookRepository.findByName(name).get().getId() != bookDto.getId())) {
+                (bookRepository.findByName(name).get().getId().equals(bookDto.getId()))) {
             throw new AlreadyExistException("Book", "name", bookDto.getName());
         }
         Long bookId = bookDto.getId();
@@ -145,12 +145,12 @@ public class BookServiceImpl implements BookService {
                 Long authorId = authorRepository.findByName(author.getName()).get().getId();
                 bookAuthorService.saveAuthorInBook(authorId, bookId);
             } else {
-                AuthorDto authorDto = authorTransformer.toAuthorDto(author);
+                AuthorDto authorDto = authorTransformer.toDto(author);
                 authorDto = authorService.add(authorDto);
                 bookAuthorService.saveAuthorInBook(authorDto.getId(), bookId);
             }
         }
-        return bookTransformer.toBookDto(bookRepository.save(updatableBook));
+        return bookTransformer.toDto(bookRepository.save(updatableBook));
     }
 
     @Transactional

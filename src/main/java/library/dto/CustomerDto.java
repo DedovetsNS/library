@@ -54,7 +54,7 @@ public class CustomerDto {
     @NotNull(groups = Update.class)
     @JsonView(Details.class)
     @NotNull(groups = {Add.class})
-    private String addres;
+    private String address;
 
     @Null(groups = Update.class)
     @JsonView(Details.class)

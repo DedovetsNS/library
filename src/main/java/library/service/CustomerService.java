@@ -18,4 +18,6 @@ public interface CustomerService {
     void deleteById(Long id);
 
     Customer update(Customer customer);
+
+    Set<Customer> findAllWithAccess();
 }

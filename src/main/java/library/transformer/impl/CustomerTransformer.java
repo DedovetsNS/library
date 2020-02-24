@@ -1,9 +1,10 @@
-package library.transformer;
+package library.transformer.impl;
 
 import library.dto.CustomerDto;
 import library.model.Customer;
 import library.model.Loan;
 import library.repository.LoanRepository;
+import library.transformer.Transformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class CustomerTransformer {
+public class CustomerTransformer implements Transformer<Customer,CustomerDto> {
 
     private final LoanRepository loanRepository;
 
@@ -21,7 +22,8 @@ public class CustomerTransformer {
         this.loanRepository = loanRepository;
     }
 
-    public Customer toCustomer(CustomerDto customerDto) {
+    @Override
+    public Customer toEntity(CustomerDto customerDto) {
         return Customer.builder()
                 .id(customerDto.getId())
                 .login(customerDto.getLogin())
@@ -29,11 +31,12 @@ public class CustomerTransformer {
                 .lastName(customerDto.getLastName())
                 .email(customerDto.getEmail())
                 .phone(customerDto.getPhone())
-                .addres(customerDto.getAddres())
+                .address(customerDto.getAddress())
                 .build();
     }
 
-    public CustomerDto toCustomerDto(Customer customer) {
+    @Override
+    public CustomerDto toDto(Customer customer) {
         Set<Loan> loans = loanRepository.findAllByCustomerId(customer.getId());
         Set<Long> loansId = loans.stream().map(Loan::getId).collect(Collectors.toSet());
 
@@ -42,16 +45,17 @@ public class CustomerTransformer {
                 .login(customer.getLogin())
                 .firstName(customer.getFirstName())
                 .lastName(customer.getLastName())
-                .addres(customer.getAddres())
+                .address(customer.getAddress())
                 .email(customer.getEmail())
                 .phone(customer.getPhone())
                 .loansId(loansId)
                 .build();
     }
 
-    public Set<CustomerDto> toCustomerDto(Set<Customer> customer) {
+    @Override
+    public Set<CustomerDto> toDto(Set<Customer> customer) {
         Set<CustomerDto> customerDto = new HashSet<>();
-        customer.forEach(customer1 -> customerDto.add(toCustomerDto(customer1)));
+        customer.forEach(customer1 -> customerDto.add(toDto(customer1)));
         return customerDto;
     }
 }

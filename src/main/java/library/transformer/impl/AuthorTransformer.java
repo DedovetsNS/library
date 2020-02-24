@@ -1,4 +1,4 @@
-package library.transformer;
+package library.transformer.impl;
 
 import library.dto.AuthorDto;
 import library.dto.AuthorInBookDto;
@@ -6,6 +6,7 @@ import library.dto.BookInAuthorDto;
 import library.model.Author;
 import library.model.Book;
 import library.repository.BookRepository;
+import library.transformer.Transformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Component
-public class AuthorTransformer {
+public class AuthorTransformer implements Transformer<Author,AuthorDto> {
 
     private final BookRepository bookRepository;
     private BookTransformer bookTransformer;
@@ -29,7 +30,8 @@ public class AuthorTransformer {
         this.bookTransformer = bookTransformer;
     }
 
-    public Author toAuthor(AuthorDto authorDto) {
+    @Override
+    public Author toEntity(AuthorDto authorDto) {
         Author author = new Author();
         author.setId(authorDto.getId());
         author.setName(authorDto.getName());
@@ -37,7 +39,9 @@ public class AuthorTransformer {
         return author;
     }
 
-    public AuthorDto toAuthorDto(Author author) {
+
+    @Override
+    public AuthorDto toDto(Author author) {
         AuthorDto authorDto = new AuthorDto();
         Set<Book> books = bookRepository.findBooksInAuthor(author.getId());
         Set<BookInAuthorDto> booksInAuthorDto = bookTransformer.toBookInAuthorDto(books);
@@ -48,9 +52,10 @@ public class AuthorTransformer {
         return authorDto;
     }
 
-    public Set<AuthorDto> toAuthorDto(Set<Author> authors) {
+    @Override
+    public Set<AuthorDto> toDto(Set<Author> authors) {
         Set<AuthorDto> authorsDto = new HashSet<>();
-        authors.forEach(author -> authorsDto.add(toAuthorDto(author)));
+        authors.forEach(author -> authorsDto.add(toDto(author)));
         return authorsDto;
     }
 
@@ -66,7 +71,7 @@ public class AuthorTransformer {
         return authorsInBookDto;
     }
 
-    public AuthorDto toAuthorDto(AuthorInBookDto author) {
+    public AuthorDto toDto(AuthorInBookDto author) {
         AuthorDto authorDto = new AuthorDto();
         Set<BookInAuthorDto> booksInAuthorDto = new HashSet<>();
         authorDto.setId(author.getId());

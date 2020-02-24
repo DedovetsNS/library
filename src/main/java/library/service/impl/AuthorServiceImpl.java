@@ -7,7 +7,7 @@ import library.model.Author;
 import library.repository.AuthorRepository;
 import library.repository.BookAuthorRepository;
 import library.service.AuthorService;
-import library.transformer.AuthorTransformer;
+import library.transformer.impl.AuthorTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,9 +33,9 @@ public class AuthorServiceImpl implements AuthorService {
         if (authorRepository.existsByName(authorDto.getName())) {
             throw new AlreadyExistException("Author", "name", authorDto.getName());
         } else {
-            Author author = authorTransformer.toAuthor(authorDto);
+            Author author = authorTransformer.toEntity(authorDto);
             author = authorRepository.save(author);
-            return authorTransformer.toAuthorDto(author);
+            return authorTransformer.toDto(author);
         }
     }
 
@@ -65,7 +65,7 @@ public class AuthorServiceImpl implements AuthorService {
 
         author.setBirthday(authorDto.getBirthday());
         author.setName(authorDto.getName());
-        return authorTransformer.toAuthorDto(authorRepository.save(author));
+        return authorTransformer.toDto(authorRepository.save(author));
     }
 
     @Override

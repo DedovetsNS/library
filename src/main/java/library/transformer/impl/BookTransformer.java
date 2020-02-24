@@ -1,4 +1,4 @@
-package library.transformer;
+package library.transformer.impl;
 
 import library.dto.AuthorInBookDto;
 import library.dto.BookDto;
@@ -6,6 +6,7 @@ import library.dto.BookInAuthorDto;
 import library.model.Author;
 import library.model.Book;
 import library.repository.AuthorRepository;
+import library.transformer.Transformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Component
-public class BookTransformer {
+public class BookTransformer implements Transformer<Book, BookDto> {
 
     private final AuthorRepository authorRepository;
     private AuthorTransformer authorTransformer;
@@ -29,7 +30,8 @@ public class BookTransformer {
         this.authorTransformer = authorTransformer;
     }
 
-    public Book toBook(BookDto bookDto) {
+    @Override
+    public Book toEntity(BookDto bookDto) {
         Book book = new Book();
 
         book.setId(bookDto.getId());
@@ -40,7 +42,8 @@ public class BookTransformer {
         return book;
     }
 
-    public BookDto toBookDto(Book book) {
+    @Override
+    public BookDto toDto(Book book) {
         BookDto bookDto = new BookDto();
         Set<Author> authors = authorRepository.findAuthorsOfBook(book.getId());
         Set<AuthorInBookDto> authorsInBookDto = authorTransformer.toAuthorInBookDto(authors);
@@ -55,11 +58,12 @@ public class BookTransformer {
         return bookDto;
     }
 
-    public Set<BookDto> toBookDto(Set<Book> allBooks) {
+    @Override
+    public Set<BookDto> toDto(Set<Book> allBooks) {
         Set<BookDto> allBooksDto = new HashSet<>();
 
         for (Book book : allBooks) {
-            BookDto bookDto = toBookDto(book);
+            BookDto bookDto = toDto(book);
             allBooksDto.add(bookDto);
         }
         return allBooksDto;

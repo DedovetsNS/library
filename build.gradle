@@ -31,5 +31,5 @@ lombok {
 	sha256 = ""
 }
 
-bootJar { mainClassName = 'library.library.LibraryApplication'}
+bootJar { mainClassName = 'library.LibraryApplication'}
 

@@ -9,7 +9,7 @@ import library.model.Book;
 import library.service.BookService;
 import library.service.impl.BookServiceImpl;
 import library.service.impl.EmailServiceImpl;
-import library.transformer.BookTransformer;
+import library.transformer.impl.BookTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,14 +38,14 @@ public class BookController {
     @GetMapping
     public Set<BookDto> findAll() {
         Set<Book> allBooks = bookService.findAll();
-        return bookTransformer.toBookDto(allBooks);
+        return bookTransformer.toDto(allBooks);
     }
 
     @JsonView(Details.class)
     @GetMapping("{id}")
     public BookDto getById(@PathVariable("id") Long id) {
         Book book = bookService.findById(id);
-        return bookTransformer.toBookDto(book);
+        return bookTransformer.toDto(book);
     }
 
     @DeleteMapping("{id}")

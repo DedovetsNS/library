@@ -7,7 +7,7 @@ import library.dto.groups.Details;
 import library.dto.groups.Update;
 import library.model.Author;
 import library.service.AuthorService;
-import library.transformer.AuthorTransformer;
+import library.transformer.impl.AuthorTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,21 +36,21 @@ public class AuthorController {
     @GetMapping("{id}")
     public AuthorDto getById(@PathVariable("id") Long id) {
         Author author = authorService.findById(id);
-        return authorTransformer.toAuthorDto(author);
+        return authorTransformer.toDto(author);
     }
 
     @JsonView(Details.class)
     @GetMapping("name/{name}")
     public AuthorDto getByName(@PathVariable("name") String name) {
         Author author = authorService.findByName(name);
-        return authorTransformer.toAuthorDto(author);
+        return authorTransformer.toDto(author);
     }
 
     @JsonView(Details.class)
     @GetMapping
     public Set<AuthorDto> findAll() {
         Set<Author> authors = authorService.findAll();
-        return authorTransformer.toAuthorDto(authors);
+        return authorTransformer.toDto(authors);
     }
 
     @DeleteMapping("{id}")
