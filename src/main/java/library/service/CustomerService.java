@@ -1,5 +1,6 @@
 package library.service;
 
+import library.dto.CustomerDto;
 import library.model.Customer;
 
 import java.util.Set;
@@ -18,6 +19,8 @@ public interface CustomerService {
     void deleteById(Long id);
 
     Customer update(Customer customer);
+
+    Set<Customer> intersectByFullName(Set<Customer> customers, Set<CustomerDto> customersDto);
 
     Set<Customer> findAllWithAccess();
 }

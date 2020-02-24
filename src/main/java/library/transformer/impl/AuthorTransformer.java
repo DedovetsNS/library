@@ -52,13 +52,6 @@ public class AuthorTransformer implements Transformer<Author,AuthorDto> {
         return authorDto;
     }
 
-    @Override
-    public Set<AuthorDto> toDto(Set<Author> authors) {
-        Set<AuthorDto> authorsDto = new HashSet<>();
-        authors.forEach(author -> authorsDto.add(toDto(author)));
-        return authorsDto;
-    }
-
     private AuthorInBookDto toAuthorInBookDto(Author author) {
         return new AuthorInBookDto(author.getId(), author.getName(), author.getBirthday());
     }

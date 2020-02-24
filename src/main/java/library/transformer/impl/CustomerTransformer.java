@@ -51,11 +51,5 @@ public class CustomerTransformer implements Transformer<Customer,CustomerDto> {
                 .loansId(loansId)
                 .build();
     }
-
-    @Override
-    public Set<CustomerDto> toDto(Set<Customer> customer) {
-        Set<CustomerDto> customerDto = new HashSet<>();
-        customer.forEach(customer1 -> customerDto.add(toDto(customer1)));
-        return customerDto;
-    }
+    
 }

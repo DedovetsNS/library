@@ -4,7 +4,7 @@ import library.dto.AuthorDto;
 import library.dto.AuthorInBookDto;
 import library.dto.BookDto;
 import library.exception.AlreadyExistException;
-import library.exception.BadRequestParametrException;
+import library.exception.BadRequestParameterException;
 import library.exception.NotAllAuthorsDataException;
 import library.exception.NotFoundException;
 import library.model.Book;
@@ -102,7 +102,7 @@ public class BookServiceImpl implements BookService {
     public void deleteById(Long id) {
         findById(id);
         if (loanRepository.existsByBookId(id)) {
-            throw new BadRequestParametrException("Not allowed delete a book that is loaned.");
+            throw new BadRequestParameterException("Not allowed delete a book that is loaned.");
         }
         bookRepository.deleteById(id);
         bookAuthorRepository.deleteAllByBookId(id);
@@ -160,7 +160,7 @@ public class BookServiceImpl implements BookService {
             throw new NotFoundException("Book", "name", bookName);
         }
         if (getQuantityInStockByName(bookName) < quantity) {
-            throw new BadRequestParametrException("Less books in the library than want to take.");
+            throw new BadRequestParameterException("Less books in the library than want to take.");
         }
         Book takedBook = bookRepository.findByName(bookName).orElseThrow(() -> new NotFoundException("Book", "name", bookName));
         Integer newQuantity = takedBook.getInStockQuantity() - quantity;

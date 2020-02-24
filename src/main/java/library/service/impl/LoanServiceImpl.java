@@ -1,6 +1,6 @@
 package library.service.impl;
 
-import library.exception.BadRequestParametrException;
+import library.exception.BadRequestParameterException;
 import library.exception.NotFoundException;
 import library.model.Loan;
 import library.repository.LoanRepository;
@@ -47,7 +47,7 @@ public class LoanServiceImpl implements library.service.LoanService {
         String bookName = loan.getBook().getName();
 
         if(! historianService.checkHistorianAccess(customerFirstName,customerLastName)){
-         throw new BadRequestParametrException(
+         throw new BadRequestParameterException(
                  "this customer ["+customerFirstName+" "+customerLastName+"] don't have access to this book ["+bookName+"]");
         }
         bookService.takeBookToLoan(loan.getBook().getName(), loan.getQuantity());

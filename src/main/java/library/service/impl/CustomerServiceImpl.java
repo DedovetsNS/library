@@ -2,7 +2,7 @@ package library.service.impl;
 
 import library.dto.CustomerDto;
 import library.exception.AlreadyExistException;
-import library.exception.BadRequestParametrException;
+import library.exception.BadRequestParameterException;
 import library.exception.NotFoundException;
 import library.model.Customer;
 import library.repository.CustomerRepository;
@@ -62,7 +62,7 @@ public class CustomerServiceImpl implements library.service.CustomerService {
     @Override
     public void deleteById(Long id) {
         if (loanRepository.existsByCustomerId(id)) {
-            throw new BadRequestParametrException("Cannot delete a customer who has loans.");
+            throw new BadRequestParameterException("Cannot delete a customer who has loans.");
         }
         customerRepository.deleteById(id);
     }
@@ -83,7 +83,8 @@ public class CustomerServiceImpl implements library.service.CustomerService {
         return customerRepository.save(updatableCustomer);
     }
 
-    private Set<Customer> intersectByFullName(Set<Customer> customers, Set<CustomerDto> customersDto){
+    @Override
+    public Set<Customer> intersectByFullName(Set<Customer> customers, Set<CustomerDto> customersDto){
         Set<Customer> intersect = new HashSet<>();
 
         for (Customer customer : customers) {

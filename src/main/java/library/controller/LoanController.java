@@ -7,12 +7,16 @@ import library.dto.groups.Details;
 import library.model.Loan;
 import library.service.LoanService;
 import library.transformer.impl.LoanTransformer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
+import static library.log.dictionary.ControllerMessages.*;
+
+@Slf4j
 @RestController
 @RequestMapping("/loan")
 public class LoanController {
@@ -30,13 +34,16 @@ public class LoanController {
     public LoanDto add(@RequestBody @Validated({Add.class}) LoanDto loanDto) {
         Loan loan = loanTransformer.toEntity(loanDto);
         loanService.takeLoan(loan);
-        return loanTransformer.toDto(loan);
+        loanDto = loanTransformer.toDto(loan);
+        log.info(LOG_ADD_NEW,Loan.class.toString(),loanDto.toString());
+        return loanDto;
     }
 
     @JsonView(Details.class)
     @GetMapping
     public Set<LoanDto> findAll() {
         Set<Loan> loans = loanService.findAll();
+        log.info(LOG_GET_ALL,Loan.class.toString());
         return loanTransformer.toDto(loans);
     }
 
@@ -44,12 +51,15 @@ public class LoanController {
     @GetMapping("{id}")
     public LoanDto getById(@PathVariable("id") Long id) {
         Loan loan = loanService.findById(id);
-        return loanTransformer.toDto(loan);
+        LoanDto loanDto = loanTransformer.toDto(loan);
+        log.info(LOG_GET,Loan.class.toString(),loanDto.toString());
+        return loanDto;
     }
 
     @DeleteMapping("{id}")
     public void deleteById(@PathVariable("id") Long id) {
         loanService.returnLoan(id);
+        log.info(LOG_DELETE_BY_ID,Loan.class.toString(),id);
     }
 
 
@@ -57,6 +67,7 @@ public class LoanController {
     @GetMapping("/expired")
     public Set<LoanDto> findExpired() {
         Set<Loan> loans = loanService.getExpiredLoans();
+        log.info(LOG_GET_SET_BY,Loan.class.toString(),"expired Date");
         return loanTransformer.toDto(loans);
     }
 }

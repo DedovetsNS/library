@@ -50,12 +50,5 @@ public class LoanTransformer implements Transformer<Loan, LoanDto> {
         loanDto.setDate(loan.getDate());
         return loanDto;
     }
-
-    @Override
-    public Set<LoanDto> toDto(Set<Loan> loans) {
-        Set<LoanDto> loansDto = new HashSet<>();
-
-        loans.forEach(loan -> loansDto.add(toDto(loan)));
-        return loansDto;
-    }
+    
 }

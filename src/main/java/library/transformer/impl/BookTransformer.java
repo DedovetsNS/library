@@ -58,17 +58,6 @@ public class BookTransformer implements Transformer<Book, BookDto> {
         return bookDto;
     }
 
-    @Override
-    public Set<BookDto> toDto(Set<Book> allBooks) {
-        Set<BookDto> allBooksDto = new HashSet<>();
-
-        for (Book book : allBooks) {
-            BookDto bookDto = toDto(book);
-            allBooksDto.add(bookDto);
-        }
-        return allBooksDto;
-    }
-
     private BookInAuthorDto toBookInAuthorDto(Book book) {
         BookInAuthorDto bookInAuthorDto = new BookInAuthorDto();
         bookInAuthorDto.setId(book.getId());
