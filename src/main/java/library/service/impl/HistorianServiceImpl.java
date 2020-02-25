@@ -19,8 +19,8 @@ public class HistorianServiceImpl implements HistorianService {
     }
 
     @Override
-    public Boolean checkHistorianAccess(String firstName, String lastName){
-        return historianFeignClient.checkAccess(firstName,lastName);
+    public Boolean checkHistorianAccess(String firstName, String lastName) {
+        return historianFeignClient.checkAccess(firstName, lastName);
     }
 
     @Override

@@ -8,12 +8,11 @@ import library.transformer.Transformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class CustomerTransformer implements Transformer<Customer,CustomerDto> {
+public class CustomerTransformer implements Transformer<Customer, CustomerDto> {
 
     private final LoanRepository loanRepository;
 
@@ -51,5 +50,5 @@ public class CustomerTransformer implements Transformer<Customer,CustomerDto> {
                 .loansId(loansId)
                 .build();
     }
-    
+
 }

@@ -33,7 +33,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-    @ExceptionHandler({BadRequestParameterException.class, AlreadyExistException.class, NotAllAuthorsDataException.class, HttpClientErrorException.BadRequest.class})
+    @ExceptionHandler({BadRequestParameterException.class,
+            AlreadyExistException.class,
+            NotAllAuthorsDataException.class,
+            HttpClientErrorException.BadRequest.class})
     protected ResponseEntity<Object> handleBadRequestException(Exception ex) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put(TIMESTAMP, LocalDateTime.now());

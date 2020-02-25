@@ -84,13 +84,13 @@ public class CustomerServiceImpl implements library.service.CustomerService {
     }
 
     @Override
-    public Set<Customer> intersectByFullName(Set<Customer> customers, Set<CustomerDto> customersDto){
+    public Set<Customer> intersectByFullName(Set<Customer> customers, Set<CustomerDto> customersDto) {
         Set<Customer> intersect = new HashSet<>();
 
         for (Customer customer : customers) {
             for (CustomerDto customerDto : customersDto) {
-                if(customer.getFirstName().equals(customerDto.getFirstName())&&
-                    customer.getLastName().equals(customerDto.getLastName())){
+                if (customer.getFirstName().equals(customerDto.getFirstName()) &&
+                        customer.getLastName().equals(customerDto.getLastName())) {
                     intersect.add(customer);
                 }
             }
@@ -100,7 +100,7 @@ public class CustomerServiceImpl implements library.service.CustomerService {
 
     @Override
     public Set<Customer> findAllWithAccess() {
-       Set<CustomerDto> withAccessCustomerDto = historianService.findAllWithAccess();
-        return intersectByFullName(customerRepository.findAll(),withAccessCustomerDto);
+        Set<CustomerDto> withAccessCustomerDto = historianService.findAllWithAccess();
+        return intersectByFullName(customerRepository.findAll(), withAccessCustomerDto);
     }
 }

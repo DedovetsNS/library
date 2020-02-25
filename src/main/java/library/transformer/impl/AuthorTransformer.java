@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Component
-public class AuthorTransformer implements Transformer<Author,AuthorDto> {
+public class AuthorTransformer implements Transformer<Author, AuthorDto> {
 
     private final BookRepository bookRepository;
     private BookTransformer bookTransformer;

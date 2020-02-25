@@ -46,9 +46,9 @@ public class LoanServiceImpl implements library.service.LoanService {
         String customerLastName = loan.getCustomer().getLastName();
         String bookName = loan.getBook().getName();
 
-        if(! historianService.checkHistorianAccess(customerFirstName,customerLastName)){
-         throw new BadRequestParameterException(
-                 "this customer ["+customerFirstName+" "+customerLastName+"] don't have access to this book ["+bookName+"]");
+        if (!historianService.checkHistorianAccess(customerFirstName, customerLastName)) {
+            throw new BadRequestParameterException(
+                    "this customer [" + customerFirstName + " " + customerLastName + "] don't have access to this book [" + bookName + "]");
         }
         bookService.takeBookToLoan(loan.getBook().getName(), loan.getQuantity());
         return loanRepository.save(loan);

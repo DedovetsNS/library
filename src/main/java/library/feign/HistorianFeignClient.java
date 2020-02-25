@@ -7,12 +7,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Set;
 
-@FeignClient(url = "${historian.checker.url}",name = "historianChecker")
+@FeignClient(url = "${historian.checker.url}",
+        name = "${historian.checker.name}",
+        value = "${historian.checker.name}")
 public interface HistorianFeignClient {
 
     @GetMapping("historian/checkAccess/{firstName}/{lastName}")
     Boolean checkAccess(@PathVariable("firstName") String firstName,
-                               @PathVariable("lastName") String lastName);
+                        @PathVariable("lastName") String lastName);
 
     @GetMapping("historian/AllWithAccess")
     Set<CustomerDto> findAllWithAccess();

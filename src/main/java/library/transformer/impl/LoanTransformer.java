@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class LoanTransformer implements Transformer<Loan, LoanDto> {
@@ -50,5 +48,5 @@ public class LoanTransformer implements Transformer<Loan, LoanDto> {
         loanDto.setDate(loan.getDate());
         return loanDto;
     }
-    
+
 }

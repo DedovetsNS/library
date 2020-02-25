@@ -36,7 +36,7 @@ public class BookController {
     @PostMapping
     public BookDto add(@RequestBody @Validated({Add.class}) BookDto bookDto) {
         BookDto addedBook = bookService.add(bookDto);
-        log.info(LOG_ADD_NEW,Book.class.toString(),addedBook.toString());
+        log.info(LOG_ADD_NEW, Book.class.toString(), addedBook.toString());
         return addedBook;
     }
 
@@ -44,7 +44,7 @@ public class BookController {
     @GetMapping
     public Set<BookDto> findAll() {
         Set<Book> allBooks = bookService.findAll();
-        log.info(LOG_GET_ALL,Book.class.toString());
+        log.info(LOG_GET_ALL, Book.class.toString());
         return bookTransformer.toDto(allBooks);
     }
 
@@ -52,21 +52,21 @@ public class BookController {
     @GetMapping("{id}")
     public BookDto getById(@PathVariable("id") Long id) {
         Book book = bookService.findById(id);
-        log.info(LOG_GET,Book.class.toString(),book.toString());
+        log.info(LOG_GET, Book.class.toString(), book.toString());
         return bookTransformer.toDto(book);
     }
 
     @DeleteMapping("{id}")
     public void deleteById(@PathVariable("id") Long id) {
         bookService.deleteById(id);
-        log.info(LOG_DELETE_BY_ID,Book.class.toString(),id);
+        log.info(LOG_DELETE_BY_ID, Book.class.toString(), id);
     }
 
     @JsonView(Details.class)
     @PutMapping
     public BookDto updateById(@RequestBody @Validated({Update.class}) BookDto bookDto) {
-       BookDto updatableBookDto = bookService.update(bookDto);
-        log.info(LOG_UPDATE, Book.class.toString(),updatableBookDto.toString());
+        BookDto updatableBookDto = bookService.update(bookDto);
+        log.info(LOG_UPDATE, Book.class.toString(), updatableBookDto.toString());
         return updatableBookDto;
     }
 }
