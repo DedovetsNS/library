@@ -39,6 +39,7 @@ public class BookTransformer implements Transformer<Book, BookDto> {
         book.setPublisher(bookDto.getPublisher());
         book.setTotalQuantity(bookDto.getTotalQuantity());
         book.setInStockQuantity(bookDto.getInStockQuantity());
+        book.setSpecificAccess(bookDto.getSpecificAccess());
         return book;
     }
 

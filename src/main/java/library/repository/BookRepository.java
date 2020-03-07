@@ -18,8 +18,7 @@ public interface BookRepository extends CrudRepository<Book, Long> {
 
     Optional<Book> findByName(String bookName);
 
-    @Query(nativeQuery = true, value = "SELECT *" +
-            "FROM book where book.id in (select book.id from book_author where author_id=:author_id);")
+    @Query(nativeQuery = true, value = "SELECT * FROM book where book.id in (select book_id from book_author where author_id=:author_id);")
     Set<Book> findBooksInAuthor(@Param("author_id") Long authorId);
 
 
