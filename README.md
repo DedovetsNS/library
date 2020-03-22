@@ -5,10 +5,10 @@ The project consists of three modules: the main library module, the email sendin
 
 ### Modules
 
-Library  - contains the main functionality.
+Library  - contains the main functionality.                                              
 https://github.com/DedovetsNS/library  
 
-Mail sender - allows to send notification email.
+Mail sender - allows to send notification email.                                            
 https://github.com/DedovetsNS/mail_sender      
 
 Historian checker - is a stub of some registry of people with special access to books.
